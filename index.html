@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Snatched</title>
+<meta name="theme-color" content="#5C1525">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Snatched">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}html{-webkit-text-size-adjust:100%}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap">
+<style>
+/* Layout: one narrow column on a burgundy ground; light cards hold the numbers, light blue marks every action. Single deliberate look in both themes. */
+:root{
+  --bg:#5C1525; --bg-deep:#45101C; --on-bg:#F8EEF0; --muted-bg:rgba(248,238,240,.72); --line-bg:rgba(248,238,240,.18);
+  --surface:#FCF8F8; --surface-2:#F1E6E8; --ink:#24151A; --muted:#76646A; --line:#E6DADC;
+  --brand:#6B1C2C; --brand-press:#561522; --brand-ink:#FFFFFF;
+  --sky:#A8CDEA; --sky-press:#93BFE2; --sky-soft:#E1EEF8; --on-sky:#0F3550;
+  --display:"DM Serif Display", "Libre Caslon Display", Georgia, "Times New Roman", serif;
+  --body:"Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif;
+  --r:14px; color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{color:var(--on-bg);font-family:var(--body);font-size:17px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  -webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;touch-action:manipulation}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding-block:8px calc(120px + env(safe-area-inset-bottom,0px))}
+.wrap.has-bar{padding-bottom:calc(196px + env(safe-area-inset-bottom,0px))}
+
+header.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-block:12px 16px;border-bottom:1px solid var(--line-bg);margin-bottom:14px}
+.mark{font-family:var(--display);font-style:italic;font-size:32px;color:var(--sky);letter-spacing:-.01em;line-height:1}
+.top small{color:var(--muted-bg);font-size:14px}
+h1{font-family:var(--display);font-weight:400;font-size:34px;line-height:1.1;margin:6px 0 4px;text-wrap:balance;color:var(--on-bg)}
+h2{font-family:var(--display);font-weight:400;font-size:24px;line-height:1.15;margin:0;text-wrap:balance;min-width:0;color:var(--ink)}
+.lede{color:var(--muted-bg);margin:0 0 20px}
+.eyebrow{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--sky);font-weight:700;margin:28px 0 10px}
+.stack{display:flex;flex-direction:column;gap:12px}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums lining-nums}
+
+/* Buttons: on the burgundy ground the main action is light blue; inside light cards it is burgundy. */
+.btn{min-height:56px;padding:0 20px;border-radius:var(--r);font-weight:700;font-size:18px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background .15s,transform .08s}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--sky);color:var(--on-sky)}
+.btn.primary:active{background:var(--sky-press)}
+.ex .btn.primary,.empty .btn.primary{background:var(--brand);color:var(--brand-ink)}
+.ex .btn.primary:active,.empty .btn.primary:active{background:var(--brand-press)}
+.btn.soft{background:var(--sky-soft);color:var(--on-sky)}
+.btn.sky{background:var(--sky);color:var(--on-sky)}
+.btn.ghost{background:transparent;color:var(--on-bg);border:1.5px solid var(--line-bg)}
+.ex .btn.ghost,.empty .btn.ghost{color:var(--muted);border-color:var(--line)}
+.btn[disabled]{opacity:.45}
+.btn.block{width:100%}
+.btn.big{min-height:64px;font-size:20px}
+.btn.armed{background:var(--on-bg);color:var(--brand);border-color:var(--on-bg)}
+.link{color:var(--muted-bg);font-size:15px;padding:10px 6px;min-height:44px;font-weight:600}
+.link.armed{color:var(--sky)}
+.ex .link{color:var(--muted)}
+.ex .link.armed{color:var(--brand)}
+
+/* Template launch cards */
+.launch{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);color:var(--ink);border-radius:18px;padding:18px;min-height:84px;box-shadow:0 2px 0 var(--bg-deep)}
+.launch:active{transform:scale(.99)}
+.launch .t{flex:1;min-width:0}
+.launch .t b{display:block;font-family:var(--display);font-weight:400;font-size:23px;line-height:1.15}
+.launch .t span{color:var(--muted);font-size:15px;display:block;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.go{flex:none;width:52px;height:52px;border-radius:50%;background:var(--sky);color:var(--on-sky);display:grid;place-items:center}
+
+/* Exercise card */
+.ex{background:var(--surface);color:var(--ink);border-radius:18px;padding:16px 14px 14px;box-shadow:0 2px 0 var(--bg-deep)}
+.ex-h{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.prev{margin:8px 0 12px;font-size:15px;color:var(--on-sky);background:var(--sky-soft);border-radius:10px;padding:8px 12px}
+.prev b{font-weight:700}
+.sets{display:flex;flex-direction:column;gap:8px}
+.set{display:grid;grid-template-columns:30px 1fr 1fr 64px;gap:8px;align-items:center;border-radius:12px;padding:4px;transition:background .15s}
+.set.head{padding-block:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.set.head span{text-align:center}
+.set .n{text-align:center;color:var(--brand);font-weight:700}
+.set input{width:100%;min-width:0;height:56px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink);text-align:center;font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.set input::placeholder{color:var(--muted);opacity:.6;font-weight:400}
+.set input:focus{border-color:var(--brand);outline:none}
+.chk{height:56px;border-radius:12px;background:var(--surface-2);color:var(--muted);display:grid;place-items:center}
+.set.done{background:var(--sky-soft)}
+.set.done input{border-color:transparent}
+.set.done .chk{background:var(--sky);color:var(--on-sky)}
+.ex-foot{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.ex-foot .btn{min-height:50px;font-size:16px}
+
+.addex{display:grid;grid-template-columns:1fr auto;gap:8px}
+.field{width:100%;min-width:0;height:56px;border-radius:var(--r);border:1.5px solid transparent;background:var(--surface);color:var(--ink);padding:0 16px;font-size:18px}
+.field:focus{border-color:var(--sky);outline:none}
+.title-in{font-family:var(--display);font-size:32px;border:0;background:transparent;padding:0;height:auto;width:100%;color:var(--on-bg);border-radius:0}
+.title-in::placeholder{color:var(--muted-bg)}
+.title-in:focus{outline:none;box-shadow:inset 0 -2px 0 var(--sky)}
+
+/* Fixed bars */
+.bar{position:fixed;left:0;right:0;bottom:calc(68px + env(safe-area-inset-bottom,0px));padding:12px max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px));background:linear-gradient(to top,var(--bg) 70%,transparent);z-index:5}
+.bar .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
+.bar .count{font-size:15px;color:var(--muted-bg);line-height:1.2;text-align:center;min-width:64px}
+.bar .count b{display:block;font-size:22px;color:var(--sky);font-variant-numeric:tabular-nums}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bg-deep);border-top:1px solid var(--line-bg);
+  padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+nav.tabs button{min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:13px;font-weight:600;color:var(--muted-bg);border-radius:12px}
+nav.tabs button[aria-current="page"]{color:var(--on-sky);background:var(--sky)}
+nav.tabs .dot{width:7px;height:7px;border-radius:50%;background:var(--sky);display:inline-block;margin-left:4px;vertical-align:middle}
+
+/* Template editor */
+.ted{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center}
+.stepper{display:grid;grid-template-columns:44px 40px 44px;align-items:center;border-radius:var(--r);height:56px;background:var(--surface);color:var(--ink)}
+.stepper button{height:100%;font-size:22px;color:var(--brand);font-weight:700}
+.stepper span{text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.x{width:44px;height:56px;color:var(--muted-bg);font-size:22px;border-radius:12px}
+.x.armed{color:var(--on-sky);background:var(--sky)}
+.hint{font-size:14px;color:var(--muted-bg);margin:2px 0 0}
+.chart .hint{color:var(--muted)}
+
+/* History */
+.hist{width:100%;text-align:left;display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;padding:14px 4px;border-bottom:1px solid var(--line-bg);min-height:72px}
+.hist .d{text-align:center;line-height:1.05}
+.hist .d b{display:block;font-family:var(--display);font-weight:400;font-size:30px;color:var(--sky)}
+.hist .d span{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-bg)}
+.hist .m{min-width:0}
+.hist .m b{display:block;font-weight:700;color:var(--on-bg)}
+.hist .m span{display:block;color:var(--muted-bg);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist .v{color:var(--muted-bg);font-size:14px;text-align:right}
+table.log{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;color:var(--ink)}
+table.log td,table.log th{padding:10px 6px;border-bottom:1px solid var(--line);text-align:right}
+table.log th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+table.log td:first-child,table.log th:first-child{text-align:left}
+
+/* Progress */
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin:0 -4px;padding-inline:4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:46px;padding:0 16px;border-radius:999px;border:1.5px solid var(--line-bg);color:var(--on-bg);font-weight:600;font-size:16px;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--sky);border-color:var(--sky);color:var(--on-sky)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--bg-deep);border-radius:var(--r);padding:4px;gap:4px;margin-top:14px}
+.seg button{min-height:46px;border-radius:10px;font-weight:600;font-size:15px;color:var(--muted-bg)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--brand)}
+.chart{background:var(--surface);border-radius:18px;padding:14px 8px 8px;margin-top:14px;box-shadow:0 2px 0 var(--bg-deep)}
+.chart svg{display:block;width:100%;height:auto}
+.chart .ax{font:13px var(--body);fill:var(--muted)}
+.chart .lbl{font:700 14px var(--body);fill:var(--brand)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.tile{background:var(--surface);color:var(--ink);border-radius:14px;padding:12px 10px;min-width:0}
+.tile span{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.tile b{display:block;font-family:var(--display);font-weight:400;font-size:26px;line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums;color:var(--brand)}
+.tile small{color:var(--muted);font-size:13px}
+
+.empty{background:var(--surface);color:var(--ink);border-radius:18px;padding:22px 18px}
+.empty h2{margin-bottom:6px}
+.empty p{color:var(--muted);margin:0 0 16px}
+.sug{display:flex;flex-direction:column;gap:6px;margin:0 0 16px;padding:0;list-style:none}
+.sug li{font-size:15px;color:var(--muted)}
+.sug li b{color:var(--ink)}
+
+.done-hero{background:var(--sky);color:var(--on-sky);border-radius:22px;padding:26px 20px;margin-top:6px}
+.done-hero h1{color:var(--on-sky);margin:0 0 4px;font-size:42px}
+.done-hero p{margin:0;opacity:.85}
+.done-hero .tiles .tile{background:rgba(255,255,255,.45)}
+.done-hero .tiles .tile span,.done-hero .tiles .tile small{color:var(--on-sky)}
+.done-hero .tiles .tile b{color:var(--on-sky)}
+.pr{display:flex;justify-content:space-between;gap:10px;padding:14px 16px;border-radius:12px;background:var(--surface);color:var(--ink);font-weight:700}
+.pr span{font-variant-numeric:tabular-nums;color:var(--brand)}
+
+.toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--sky);color:var(--on-sky);padding:12px 18px;border-radius:12px;font-size:15px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:20;max-width:calc(100% - 32px);text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <header class="top"><span class="mark">Snatched</span><small id="today"></small></header>
+  <main id="main"><p class="muted">Laster øktene dine …</p></main>
+</div>
+<div class="bar" id="bar" hidden></div>
+<nav class="tabs" aria-label="Hovedmeny"><div class="in" id="tabs"></div></nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<datalist id="exlist"></datalist>
+
+<script>
+(function(){
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = v => { if (v === '' || v == null) return null; const n = parseFloat(String(v).replace(',', '.')); return isFinite(n) ? n : null; };
+const fmt = (n, d=1) => n == null ? '–' : Number(n).toLocaleString('nb-NO', {maximumFractionDigits:d});
+const key = s => String(s||'').trim().toLowerCase();
+const e1rm = (kg, reps) => !kg || !reps ? 0 : reps === 1 ? kg : kg * (1 + reps/30);
+const dShort = t => new Date(t).toLocaleDateString('nb-NO', {day:'numeric', month:'short'});
+const dLong = t => new Date(t).toLocaleDateString('nb-NO', {weekday:'long', day:'numeric', month:'long'});
+const clock = t => new Date(t).toLocaleTimeString('nb-NO', {hour:'2-digit', minute:'2-digit'});
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const clone = o => JSON.parse(JSON.stringify(o));
+const setStr = s => `${fmt(num(s.kg))}×${num(s.reps) ?? '–'}`;
+const ICON = {
+  check:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  play:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"/></svg>',
+  okt:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9v6M6 6.5v11M18 6.5v11M21 9v6M6 12h12"/></svg>',
+  maler:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>',
+  hist:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  frem:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M5 15l4.5-4.5 3.5 3L19 7"/><path d="M15 7h4v4"/></svg>'
+};
+
+let toastT;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(()=>t.classList.remove('on'), 2600); }
+
+/* ---------- storage: private db subtree, localStorage fallback ---------- */
+const LS = 'snatched.docs.v1';
+const Store = {
+  docs: {}, mode: 'local', col: null, q: {}, onChange: null, initial: true,
+  loadLocal(){ try { this.docs = JSON.parse(localStorage.getItem(LS) || '{}') || {}; } catch(e){ this.docs = {}; } },
+  saveLocal(){ if (this.mode !== 'local') return; try { localStorage.setItem(LS, JSON.stringify(this.docs)); } catch(e){} },
+  emit(initial){ this.onChange && this.onChange(initial); },
+  async init(){
+    this.loadLocal(); this.emit(true);
+    const c = window.claude;
+    if (!c || !c.use) return;
+    let db, user;
+    try { [db, user] = await Promise.all([c.use('db'), c.use('user')]); } catch(e){ return; }
+    if (!db || !user) return;
+    let id = null; try { id = await user.id(); } catch(e){}
+    if (!id) return;
+    this.col = db.collection('data/users/' + id);
+    let first = true;
+    this.col.onSnapshot(async snap => {
+      if (first && !snap.metadata.fromCache){
+        first = false;
+        const local = this.docs;
+        const localIds = Object.keys(local);
+        this.mode = 'db';
+        const next = {}; snap.docs.forEach(d => next[d.id] = d.data());
+        this.docs = next;
+        // Move anything logged before sync was available into the private store.
+        if (snap.empty && localIds.length){
+          for (const k of localIds){ this.docs[k] = local[k]; await this.col.doc(k).set(clone(local[k])).catch(()=>{}); }
+          try { localStorage.removeItem(LS); } catch(e){}
+        }
+        this.emit(true); return;
+      }
+      if (first) return; // wait for a server-definitive first view
+      const next = {}; snap.docs.forEach(d => next[d.id] = d.data());
+      // keep our in-flight local values for docs we are writing
+      for (const k in this.q) if (this.q[k].busy) next[k] = this.docs[k];
+      this.docs = next; this.emit(false);
+    }, err => { toast('Synkroniseringen stoppet. Last inn siden på nytt.'); });
+  },
+  put(id, obj){ this.docs[id] = obj; this.saveLocal(); this.write(id); this.emit(false); },
+  del(id){ delete this.docs[id]; this.saveLocal(); this.write(id); this.emit(false); },
+  write(id){
+    if (this.mode !== 'db' || !this.col) return;
+    const st = this.q[id] || (this.q[id] = {busy:false, dirty:false});
+    if (st.busy){ st.dirty = true; return; }
+    st.busy = true;
+    const run = async () => {
+      const v = this.docs[id];
+      try { v === undefined ? await this.col.doc(id).delete() : await this.col.doc(id).set(clone(v)); }
+      catch(e){
+        if (e && e.code === 'unavailable'){ await new Promise(r=>setTimeout(r, 600 + Math.random()*800)); try { v === undefined ? await this.col.doc(id).delete() : await this.col.doc(id).set(clone(v)); } catch(e2){ toast('Kunne ikke lagre. Sjekk nettet.'); } }
+        else if (e && e.code === 'quota_exceeded') toast('Lagringen er full. Slett gamle økter.');
+        else toast('Kunne ikke lagre endringen.');
+      }
+      if (st.dirty){ st.dirty = false; return run(); }
+      st.busy = false;
+    };
+    run();
+  }
+};
+
+/* ---------- derived data ---------- */
+const templates = () => Object.entries(Store.docs).filter(([k,v]) => v && v.kind === 'template').map(([k,v]) => ({id:k, ...v})).sort((a,b) => (a.order ?? 0) - (b.order ?? 0) || a.name.localeCompare(b.name, 'nb'));
+const sessions = () => Object.entries(Store.docs).filter(([k,v]) => v && v.kind === 'session').map(([k,v]) => ({id:k, ...v})).sort((a,b) => b.finishedAt - a.finishedAt);
+function lastFor(name){
+  const k = key(name);
+  for (const s of sessions()){ const ex = s.exercises.find(e => key(e.name) === k); if (ex && ex.sets.length) return {date: s.finishedAt, sets: ex.sets}; }
+  return null;
+}
+function exerciseNames(){
+  const m = new Map();
+  for (const s of sessions()) for (const e of s.exercises){ const k = key(e.name); if (!m.has(k)) m.set(k, {name:e.name, n:0}); m.get(k).n++; }
+  for (const t of templates()) for (const e of t.exercises){ const k = key(e.name); if (!m.has(k)) m.set(k, {name:e.name, n:0}); }
+  return [...m.values()];
+}
+const sessVolume = s => s.exercises.reduce((a,e) => a + e.sets.reduce((b,x) => b + (x.kg||0)*(x.reps||0), 0), 0);
+const sessSets = s => s.exercises.reduce((a,e) => a + e.sets.length, 0);
+
+/* ---------- app state ---------- */
+const S = { tab:'okt', active:null, summary:null, editor:null, histId:null, progEx:null, metric:'e1rm', loadedActive:false, needsRender:false };
+let saveT;
+function saveActive(now){
+  clearTimeout(saveT);
+  const go = () => { if (S.active) Store.put('active', {kind:'active', ...clone(S.active)}); };
+  if (now) go(); else saveT = setTimeout(go, 900);
+}
+let wake = null;
+async function keepAwake(on){
+  try {
+    if (on && !wake && navigator.wakeLock && document.visibilityState === 'visible'){ wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => wake = null); }
+    if (!on && wake){ await wake.release(); wake = null; }
+  } catch(e){ wake = null; }
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S.active) keepAwake(true); if (document.visibilityState === 'hidden' && S.active) saveActive(true); });
+
+Store.onChange = (initial) => {
+  if (initial && !S.active && Store.docs.active && Store.docs.active.exercises){ const a = clone(Store.docs.active); delete a.kind; S.active = a; keepAwake(true); }
+  const ae = document.activeElement;
+  if (ae && ae.tagName === 'INPUT' && $('#main').contains(ae) && !initial){ S.needsRender = true; return; }
+  render();
+};
+document.addEventListener('focusout', () => setTimeout(() => { if (S.needsRender && !(document.activeElement && document.activeElement.tagName === 'INPUT')){ S.needsRender = false; render(); } }, 0));
+
+/* ---------- starter templates (added only on tap) ---------- */
+const STARTERS = [
+  {name:'Overkropp', exercises:[{name:'Benkpress',sets:3},{name:'Roing med stang',sets:3},{name:'Skulderpress',sets:3},{name:'Nedtrekk',sets:3},{name:'Bicepscurl',sets:2}]},
+  {name:'Underkropp', exercises:[{name:'Knebøy',sets:3},{name:'Rumensk markløft',sets:3},{name:'Utfall',sets:3},{name:'Liggende lårcurl',sets:2},{name:'Tåhev',sets:3}]}
+];
+
+/* ---------- views ---------- */
+function render(){
+  $('#today').textContent = dLong(Date.now());
+  const tabs = [['okt','Økt'],['maler','Maler'],['hist','Historikk'],['frem','Fremgang']];
+  $('#tabs').innerHTML = tabs.map(([k,l]) => `<button data-act="tab" data-k="${k}" ${S.tab===k?'aria-current="page"':''}>${ICON[k]}<span>${l}${k==='okt'&&S.active&&S.tab!=='okt'?'<i class="dot"></i>':''}</span></button>`).join('');
+  $('#exlist').innerHTML = exerciseNames().map(e => `<option value="${esc(e.name)}">`).join('');
+  const m = $('#main'); const bar = $('#bar');
+  bar.hidden = true; $('#wrap').classList.remove('has-bar');
+  if (S.tab === 'okt') m.innerHTML = S.summary ? vSummary() : S.active ? vWorkout() : vStart();
+  else if (S.tab === 'maler') m.innerHTML = S.editor ? vEditor() : vTemplates();
+  else if (S.tab === 'hist') m.innerHTML = S.histId ? vSession() : vHistory();
+  else m.innerHTML = vProgress();
+  if (S.tab === 'okt' && S.active && !S.summary){ bar.hidden = false; $('#wrap').classList.add('has-bar'); bar.innerHTML = vBar(); }
+}
+
+function vStart(){
+  const ts = templates(); const last = sessions()[0];
+  let h = `<h1>Hva trener du i dag?</h1><p class="lede">${last ? `Forrige økt: ${esc(last.name)}, ${dShort(last.finishedAt)}.` : 'Velg en mal, så henter Snatched vektene fra sist.'}</p>`;
+  if (!ts.length){
+    h += `<div class="empty"><h2>Ingen maler ennå</h2><p>Lag din egen under Maler, eller start med to forslag du kan endre etterpå:</p>
+      <ul class="sug">${STARTERS.map(t => `<li><b>${t.name}:</b> ${t.exercises.map(e=>e.name).join(', ')}</li>`).join('')}</ul>
+      <button class="btn primary block" data-act="starters">Legg til forslagene</button></div>`;
+  } else {
+    h += `<div class="stack">` + ts.map(t => {
+      const lastT = sessions().find(s => s.templateId === t.id);
+      return `<button class="launch" data-act="start" data-id="${t.id}"><span class="t"><b>${esc(t.name)}</b><span>${t.exercises.length} øvelser${lastT ? ' · sist ' + dShort(lastT.finishedAt) : ''}</span></span><span class="go">${ICON.play}</span></button>`;
+    }).join('') + `</div>`;
+  }
+  h += `<div class="stack" style="margin-top:12px"><button class="btn ghost block" data-act="start-empty">Start tom økt</button></div>`;
+  return h;
+}
+
+function vWorkout(){
+  const a = S.active;
+  let h = `<input class="field title-in" id="wk-name" data-f="wkname" value="${esc(a.name)}" aria-label="Navn på økten">
+    <p class="lede" style="margin-top:4px">Startet ${clock(a.startedAt)} · fyll inn og huk av hvert sett</p><div class="stack">`;
+  a.exercises.forEach((ex, i) => {
+    const p = ex.prev;
+    h += `<section class="ex"><div class="ex-h"><h2>${esc(ex.name)}</h2><button class="link" data-act="ex-del" data-i="${i}" data-confirm="Fjern?">Fjern</button></div>
+      <p class="prev">${p ? `Forrige · ${dShort(p.date)}: <b class="num">${p.sets.map(setStr).join(', ')}</b>` : 'Ny øvelse. Ingen tidligere logg.'}</p>
+      <div class="sets"><div class="set head"><span>Sett</span><span>kg</span><span>Reps</span><span></span></div>`;
+    ex.sets.forEach((s, j) => {
+      h += `<div class="set${s.done?' done':''}" id="set-${i}-${j}"><span class="n num">${j+1}</span>
+        <input id="kg-${i}-${j}" data-f="kg" data-i="${i}" data-j="${j}" inputmode="decimal" enterkeyhint="next" value="${esc(s.kg)}" placeholder="kg" aria-label="Vekt sett ${j+1}">
+        <input id="reps-${i}-${j}" data-f="reps" data-i="${i}" data-j="${j}" inputmode="numeric" enterkeyhint="done" value="${esc(s.reps)}" placeholder="reps" aria-label="Reps sett ${j+1}">
+        <button class="chk" data-act="done" data-i="${i}" data-j="${j}" aria-pressed="${!!s.done}" aria-label="Sett ${j+1} ferdig">${ICON.check}</button></div>`;
+    });
+    h += `</div><div class="ex-foot"><button class="btn soft" data-act="set-add" data-i="${i}">+ Sett</button><button class="btn ghost" data-act="set-del" data-i="${i}" ${ex.sets.length<=1?'disabled':''}>− Sett</button></div></section>`;
+  });
+  h += `</div><p class="eyebrow">Legg til øvelse</p><div class="addex"><input class="field" id="addex" list="exlist" placeholder="F.eks. Pull-ups" autocomplete="off" enterkeyhint="done"><button class="btn primary" data-act="ex-add">Legg til</button></div>
+    <div style="margin-top:28px;text-align:center"><button class="link" data-act="discard" data-confirm="Trykk igjen for å forkaste økten">Forkast økten</button></div>`;
+  return h;
+}
+function doneCount(){ let d=0,t=0; S.active.exercises.forEach(e => e.sets.forEach(s => { t++; if (s.done) d++; })); return [d,t]; }
+function vBar(){
+  const [d,t] = doneCount();
+  return `<div class="in"><div class="count" id="count"><b>${d}/${t}</b>sett</div><button class="btn primary big block" data-act="finish" data-confirm="Lagre ${d} sett?">Fullfør økt</button></div>`;
+}
+
+function vSummary(){
+  const s = Store.docs[S.summary.id]; if (!s){ S.summary = null; return vStart(); }
+  const mins = Math.max(1, Math.round((s.finishedAt - s.startedAt)/60000));
+  let h = `<div class="done-hero"><h1>Bra jobba.</h1><p>${esc(s.name)} · ${dLong(s.finishedAt)}</p>
+    <div class="tiles"><div class="tile"><span>Sett</span><b>${sessSets(s)}</b></div><div class="tile"><span>Volum</span><b>${fmt(sessVolume(s)/1000)}</b><small>tonn</small></div><div class="tile"><span>Tid</span><b>${mins}</b><small>min</small></div></div></div>`;
+  if (S.summary.prs.length){
+    h += `<p class="eyebrow">Nye rekorder (estimert 1RM)</p><div class="stack">` + S.summary.prs.map(p => `<div class="pr">${esc(p.name)}<span>${fmt(p.val)} kg</span></div>`).join('') + `</div>`;
+  }
+  h += `<div class="stack" style="margin-top:24px">`;
+  if (S.summary.tplId && Store.docs[S.summary.tplId] && S.summary.changed) h += `<button class="btn sky block" data-act="tpl-sync">Oppdater malen «${esc(Store.docs[S.summary.tplId].name)}» med denne økten</button>`;
+  h += `<button class="btn primary block big" data-act="summary-close">Ferdig</button></div>`;
+  return h;
+}
+
+function vTemplates(){
+  const ts = templates();
+  let h = `<h1>Maler</h1><p class="lede">Øktene du kjører om igjen. Antall sett er utgangspunktet, du kan endre underveis.</p>`;
+  if (!ts.length) h += `<div class="empty"><h2>Ingen maler ennå</h2><p>En mal er en liste med øvelser og antall sett. Lag din første, eller legg inn to forslag.</p><div class="stack"><button class="btn primary block" data-act="tpl-new">Ny mal</button><button class="btn soft block" data-act="starters">Legg til forslagene</button></div></div>`;
+  else {
+    h += `<div class="stack">` + ts.map(t => `<div class="ex"><div class="ex-h"><h2>${esc(t.name)}</h2><button class="link" data-act="tpl-edit" data-id="${t.id}">Rediger</button></div>
+      <p class="prev">${t.exercises.map(e => `${esc(e.name)} <span class="num">${e.sets}×</span>`).join(' · ')}</p>
+      <button class="btn primary block" data-act="start" data-id="${t.id}">${ICON.play} Start økt</button></div>`).join('') + `</div>
+      <div class="stack" style="margin-top:12px"><button class="btn soft block" data-act="tpl-new">+ Ny mal</button></div>`;
+  }
+  return h;
+}
+function vEditor(){
+  const e = S.editor;
+  let h = `<input class="field title-in" id="tname" data-f="tname" value="${esc(e.name)}" placeholder="Navn på malen" aria-label="Navn på malen">
+    <p class="lede" style="margin-top:6px">Øvelser og antall sett</p><div class="stack">`;
+  e.exercises.forEach((x, i) => {
+    h += `<div class="ted"><input class="field" id="tex-${i}" data-f="tex" data-i="${i}" list="exlist" value="${esc(x.name)}" placeholder="Øvelse" autocomplete="off">
+      <div class="stepper"><button data-act="tex-minus" data-i="${i}" aria-label="Færre sett">−</button><span>${x.sets}</span><button data-act="tex-plus" data-i="${i}" aria-label="Flere sett">+</button></div>
+      <button class="x" data-act="tex-del" data-i="${i}" data-confirm="✓" aria-label="Fjern øvelse">×</button></div>`;
+  });
+  h += `</div><button class="btn soft block" style="margin-top:12px" data-act="tex-add">+ Øvelse</button>
+    <div class="stack" style="margin-top:24px"><button class="btn primary block big" data-act="tpl-save">Lagre mal</button><button class="btn ghost block" data-act="tpl-cancel">Avbryt</button></div>`;
+  if (e.id) h += `<div style="margin-top:20px;text-align:center"><button class="link" data-act="tpl-del" data-confirm="Trykk igjen for å slette malen">Slett malen</button></div>`;
+  return h;
+}
+
+function vHistory(){
+  const ss = sessions();
+  let h = `<h1>Historikk</h1>`;
+  if (!ss.length) return h + `<div class="empty"><h2>Ingen økter logget</h2><p>Fullførte økter havner her, med alle sett og vekter.</p><button class="btn primary block" data-act="tab" data-k="okt">Start en økt</button></div>` + vBackup();
+  const total = ss.length; const month = ss.filter(s => Date.now() - s.finishedAt < 30*864e5).length;
+  h += `<p class="lede">${total} økter totalt · ${month} siste 30 dager</p>`;
+  let cur = '';
+  for (const s of ss){
+    const mo = new Date(s.finishedAt).toLocaleDateString('nb-NO', {month:'long', year:'numeric'});
+    if (mo !== cur){ cur = mo; h += `<p class="eyebrow">${mo}</p>`; }
+    const d = new Date(s.finishedAt);
+    h += `<button class="hist" data-act="hist-open" data-id="${s.id}"><span class="d"><b class="num">${d.getDate()}</b><span>${d.toLocaleDateString('nb-NO',{weekday:'short'})}</span></span>
+      <span class="m"><b>${esc(s.name)}</b><span>${s.exercises.map(e=>esc(e.name)).join(', ')}</span></span><span class="v num">${sessSets(s)} sett<br>${fmt(sessVolume(s)/1000)} t</span></button>`;
+  }
+  return h + vBackup();
+}
+function vBackup(){
+  return `<p class="eyebrow">Sikkerhetskopi</p><div class="ex"><p style="margin:0;color:var(--muted);font-size:15px">Øktene og malene lagres bare på denne telefonen. Last ned en kopi innimellom, så kan du gjenopprette alt på en ny telefon.</p>
+    <div class="ex-foot"><button class="btn primary" data-act="export">Last ned kopi</button><label class="btn ghost" for="importf">Gjenopprett</label></div>
+    <input type="file" id="importf" accept="application/json,.json" hidden></div>`;
+}
+function vSession(){
+  const s = Store.docs[S.histId]; if (!s){ S.histId = null; return vHistory(); }
+  let h = `<button class="link" data-act="hist-back">← Historikk</button><h1>${esc(s.name)}</h1><p class="lede">${dLong(s.finishedAt)} · ${clock(s.startedAt)}–${clock(s.finishedAt)} · ${fmt(sessVolume(s))} kg volum</p><div class="stack">`;
+  for (const e of s.exercises){
+    h += `<div class="ex"><h2>${esc(e.name)}</h2><table class="log" style="margin-top:8px"><thead><tr><th>Sett</th><th>kg</th><th>Reps</th><th>e1RM</th></tr></thead><tbody>` +
+      e.sets.map((x,j) => `<tr><td>${j+1}</td><td>${fmt(x.kg)}</td><td>${x.reps}</td><td>${fmt(e1rm(x.kg,x.reps))}</td></tr>`).join('') + `</tbody></table></div>`;
+  }
+  h += `</div><div style="margin-top:24px;text-align:center"><button class="link" data-act="hist-del" data-confirm="Trykk igjen for å slette økten">Slett økten</button></div>`;
+  return h;
+}
+
+const METRICS = {e1rm:['Est. 1RM','kg'], top:['Toppvekt','kg'], vol:['Volum','kg']};
+function series(name){
+  const k = key(name);
+  return sessions().slice().reverse().map(s => {
+    const e = s.exercises.find(x => key(x.name) === k); if (!e || !e.sets.length) return null;
+    let best = null;
+    for (const x of e.sets){ const v = e1rm(x.kg, x.reps); if (!best || v > best.v) best = {v, kg:x.kg, reps:x.reps}; }
+    return {t:s.finishedAt, e1rm:best.v, top:Math.max(...e.sets.map(x=>x.kg||0)), vol:e.sets.reduce((a,x)=>a+(x.kg||0)*(x.reps||0),0), best, sets:e.sets};
+  }).filter(Boolean);
+}
+function vProgress(){
+  const names = exerciseNames().filter(e => e.n > 0).sort((a,b) => b.n - a.n || a.name.localeCompare(b.name,'nb'));
+  let h = `<h1>Fremgang</h1>`;
+  if (!names.length) return h + `<div class="empty"><h2>Ingen data ennå</h2><p>Når du har fullført økter, ser du utviklingen per øvelse her: estimert 1RM, toppvekt og volum.</p><button class="btn primary block" data-act="tab" data-k="okt">Start en økt</button></div>`;
+  if (!S.progEx || !names.some(n => key(n.name) === key(S.progEx))) S.progEx = names[0].name;
+  const pts = series(S.progEx);
+  h += `<div class="chips" role="group" aria-label="Velg øvelse">${names.map(n => `<button class="chip" data-act="prog-ex" data-name="${esc(n.name)}" aria-pressed="${key(n.name)===key(S.progEx)}">${esc(n.name)}</button>`).join('')}</div>
+    <div class="seg" role="group" aria-label="Mål">${Object.entries(METRICS).map(([k,[l]]) => `<button data-act="metric" data-k="${k}" aria-pressed="${S.metric===k}">${l}</button>`).join('')}</div>
+    <div class="chart" id="chart">${chartSVG(pts, S.metric)}</div>`;
+  const bestE = pts.reduce((a,p) => p.e1rm > a.e1rm ? p : a, pts[0]);
+  const bestTop = Math.max(...pts.map(p => p.top));
+  const first = pts[0], last = pts[pts.length-1];
+  const diff = pts.length > 1 ? last[S.metric] - first[S.metric] : null;
+  h += `<div class="tiles"><div class="tile"><span>Beste 1RM</span><b>${fmt(bestE.e1rm)}</b><small>${fmt(bestE.best.kg)}×${bestE.best.reps}</small></div>
+    <div class="tile"><span>Toppvekt</span><b>${fmt(bestTop)}</b><small>kg</small></div>
+    <div class="tile"><span>Endring</span><b>${diff == null ? '–' : (diff >= 0 ? '+' : '−') + fmt(Math.abs(diff))}</b><small>${pts.length} økter</small></div></div>
+    <p class="eyebrow">Siste økter</p><div class="ex"><table class="log"><thead><tr><th>Dato</th><th>Sett</th><th>e1RM</th></tr></thead><tbody>` +
+    pts.slice().reverse().slice(0, 8).map(p => `<tr><td>${dShort(p.t)}</td><td>${p.sets.map(setStr).join(' ')}</td><td>${fmt(p.e1rm)}</td></tr>`).join('') + `</tbody></table></div>
+    <p class="hint" style="margin-top:10px">Estimert 1RM regnes ut med Epley: vekt × (1 + reps/30), fra beste sett i hver økt.</p>`;
+  return h;
+}
+function niceStep(r){ const p = Math.pow(10, Math.floor(Math.log10(r))); const m = r/p; return (m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10)*p; }
+function chartSVG(pts, metric){
+  const W = Math.max(300, Math.min(544, ($('#main')?.clientWidth || 360) - 16)), H = 230, L = 44, R = 18, T = 18, B = 30;
+  if (!pts.length) return '';
+  const vals = pts.map(p => p[metric]);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (hi === lo){ lo = lo * 0.9; hi = hi * 1.1 || 10; }
+  const pad = (hi - lo) * 0.12; lo = Math.max(0, lo - pad); hi = hi + pad;
+  const step = niceStep((hi - lo) / 4); lo = Math.floor(lo/step)*step; hi = Math.ceil(hi/step)*step;
+  const t0 = pts[0].t, t1 = pts[pts.length-1].t;
+  const x = t => pts.length === 1 || t1 === t0 ? (L + (W-L-R)/2) : L + (t - t0)/(t1 - t0) * (W - L - R);
+  const y = v => T + (1 - (v - lo)/(hi - lo)) * (H - T - B);
+  let g = '';
+  for (let v = lo; v <= hi + 1e-9; v += step){
+    g += `<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text class="ax" x="${L-8}" y="${y(v)+4}" text-anchor="end">${fmt(metric==='vol'&&hi>=10000?v/1000:v)}${metric==='vol'&&hi>=10000?'k':''}</text>`;
+  }
+  const xl = [pts[0]]; if (pts.length > 2) xl.push(pts[Math.floor((pts.length-1)/2)]); if (pts.length > 1) xl.push(pts[pts.length-1]);
+  xl.forEach((p, i) => { g += `<text class="ax" x="${x(p.t)}" y="${H-8}" text-anchor="${pts.length===1?'middle':i===0?'start':i===xl.length-1?'end':'middle'}">${dShort(p.t)}</text>`; });
+  const line = pts.map((p,i) => `${i?'L':'M'}${x(p.t).toFixed(1)},${y(p[metric]).toFixed(1)}`).join(' ');
+  const area = pts.length > 1 ? `${line} L${x(t1).toFixed(1)},${H-B} L${x(t0).toFixed(1)},${H-B} Z` : '';
+  const lp = pts[pts.length-1];
+  const lx = x(lp.t), ly = y(lp[metric]);
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${METRICS[metric][0]} over tid for ${esc(S.progEx)}">
+    <defs><linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--sky)" stop-opacity=".55"/><stop offset="1" stop-color="var(--sky)" stop-opacity="0"/></linearGradient></defs>
+    ${g}${area ? `<path d="${area}" fill="url(#fill)"/>` : ''}
+    <path d="${line}" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${pts.map(p => `<circle cx="${x(p.t)}" cy="${y(p[metric])}" r="3.5" fill="var(--surface)" stroke="var(--brand)" stroke-width="2"/>`).join('')}
+    <circle cx="${lx}" cy="${ly}" r="6.5" fill="var(--brand)" stroke="var(--surface)" stroke-width="2.5"/>
+    <text class="lbl" x="${Math.min(lx, W-R)}" y="${Math.max(ly-12, 14)}" text-anchor="${pts.length===1?'middle':'end'}">${fmt(lp[metric])} kg</text>
+  </svg>${pts.length === 1 ? '<p class="hint" style="padding:0 8px 6px">Én økt logget. Kurven kommer når du har flere.</p>' : ''}`;
+}
+
+/* ---------- actions ---------- */
+function buildSets(name, n){
+  const last = lastFor(name);
+  const sets = [];
+  for (let j = 0; j < n; j++){
+    const src = last ? (last.sets[j] || last.sets[last.sets.length-1]) : null;
+    sets.push({kg: src ? String(src.kg).replace('.', ',') : '', reps: src ? String(src.reps) : '', done:false});
+  }
+  return {name, sets, prev: last ? {date:last.date, sets:last.sets.map(s=>({kg:s.kg, reps:s.reps}))} : null};
+}
+function startSession(tpl){
+  S.active = {id: uid(), name: tpl ? tpl.name : 'Økt ' + dShort(Date.now()), templateId: tpl ? tpl.id : null, startedAt: Date.now(),
+    exercises: tpl ? tpl.exercises.map(e => buildSets(e.name, e.sets)) : []};
+  S.summary = null; S.tab = 'okt'; saveActive(true); keepAwake(true); render(); window.scrollTo(0,0);
+}
+function finishSession(){
+  const a = S.active;
+  const exercises = a.exercises.map(e => ({name: e.name.trim(), sets: e.sets.filter(s => s.done).map(s => ({kg: num(s.kg) || 0, reps: Math.round(num(s.reps) || 0)})).filter(s => s.reps > 0)})).filter(e => e.sets.length);
+  if (!exercises.length){ toast('Huk av settene du har gjort før du fullfører.'); return; }
+  const prs = [];
+  for (const e of exercises){
+    const prior = series(e.name); if (!prior.length) continue;
+    const before = Math.max(...prior.map(p => p.e1rm));
+    const now = Math.max(...e.sets.map(s => e1rm(s.kg, s.reps)));
+    if (now > before + 0.01) prs.push({name: e.name, val: now});
+  }
+  const id = 'ses_' + a.id;
+  Store.put(id, {kind:'session', name: a.name.trim() || 'Økt', templateId: a.templateId, startedAt: a.startedAt, finishedAt: Date.now(), exercises});
+  let changed = false;
+  const tpl = a.templateId && Store.docs[a.templateId];
+  if (tpl){
+    const sig = list => list.map(e => key(e.name) + ':' + (e.sets.length ?? e.sets)).join('|');
+    changed = sig(tpl.exercises.map(e => ({name:e.name, sets:{length:e.sets}}))) !== sig(exercises);
+  }
+  S.summary = {id, prs, tplId: a.templateId, changed};
+  S.active = null; clearTimeout(saveT); Store.del('active'); keepAwake(false);
+  render(); window.scrollTo(0,0);
+}
+
+function armOrGo(el){
+  if (!el.dataset.confirm) return true;
+  if (el.classList.contains('armed')) return true;
+  el.dataset.label = el.innerHTML; el.textContent = el.dataset.confirm; el.classList.add('armed');
+  setTimeout(() => { if (el.isConnected && el.classList.contains('armed')){ el.classList.remove('armed'); el.innerHTML = el.dataset.label; } }, 3200);
+  return false;
+}
+
+document.addEventListener('click', ev => {
+  const el = ev.target.closest('[data-act]'); if (!el) return;
+  const act = el.dataset.act, i = +el.dataset.i, j = +el.dataset.j;
+  const a = S.active;
+  switch(act){
+    case 'tab': S.tab = el.dataset.k; if (S.tab === 'hist') S.histId = null; render(); window.scrollTo(0,0); break;
+    case 'starters': STARTERS.forEach((t, n) => Store.put('tpl_' + uid(), {kind:'template', name:t.name, order:n, exercises:clone(t.exercises)})); toast('To maler lagt til'); break;
+    case 'start': { if (S.active){ S.tab = 'okt'; render(); toast('Fullfør eller forkast økten du er i gang med først'); return; } startSession(templates().find(t => t.id === el.dataset.id)); break; }
+    case 'start-empty': startSession(null); setTimeout(() => $('#addex')?.focus(), 50); break;
+    case 'done': {
+      const s = a.exercises[i].sets[j]; s.done = !s.done;
+      if (s.done){
+        if (s.kg === '' && s.reps === ''){ s.done = false; toast('Fyll inn kg og reps først'); return; }
+        const nx = a.exercises[i].sets[j+1];
+        if (nx && !nx.done && nx.kg === '' && nx.reps === ''){ nx.kg = s.kg; nx.reps = s.reps; const ki = $(`#kg-${i}-${j+1}`), ri = $(`#reps-${i}-${j+1}`); if (ki) ki.value = s.kg; if (ri) ri.value = s.reps; }
+        if (navigator.vibrate) try { navigator.vibrate(12); } catch(e){}
+      }
+      const row = $(`#set-${i}-${j}`); row.classList.toggle('done', s.done); el.setAttribute('aria-pressed', s.done);
+      $('#bar').innerHTML = vBar(); saveActive(); break;
+    }
+    case 'set-add': { const ss = a.exercises[i].sets; const l = ss[ss.length-1]; ss.push({kg: l ? l.kg : '', reps: l ? l.reps : '', done:false}); saveActive(); render(); break; }
+    case 'set-del': if (a.exercises[i].sets.length > 1){ a.exercises[i].sets.pop(); saveActive(); render(); } break;
+    case 'ex-del': if (!armOrGo(el)) return; a.exercises.splice(i, 1); saveActive(); render(); break;
+    case 'ex-add': {
+      const inp = $('#addex'); const name = inp.value.trim(); if (!name){ inp.focus(); return; }
+      const known = exerciseNames().find(e => key(e.name) === key(name));
+      a.exercises.push(buildSets(known ? known.name : name, 3)); saveActive(); render();
+      const n = a.exercises.length - 1; setTimeout(() => $(`#kg-${n}-0`)?.scrollIntoView({block:'center', behavior:'smooth'}), 30); break;
+    }
+    case 'discard': if (!armOrGo(el)) return; S.active = null; clearTimeout(saveT); Store.del('active'); keepAwake(false); render(); toast('Økten er forkastet'); break;
+    case 'finish': { const [d] = doneCount(); if (!d){ toast('Huk av settene du har gjort før du fullfører.'); return; } el.dataset.confirm = `Lagre ${d} sett?`; if (!armOrGo(el)) return; finishSession(); break; }
+    case 'summary-close': S.summary = null; render(); break;
+    case 'tpl-sync': {
+      const s = Store.docs[S.summary.id], t = Store.docs[S.summary.tplId];
+      Store.put(S.summary.tplId, {...clone(t), exercises: s.exercises.map(e => ({name:e.name, sets:e.sets.length}))});
+      S.summary.changed = false; toast('Malen er oppdatert'); render(); break;
+    }
+    case 'tpl-new': S.editor = {id:null, name:'', exercises:[{name:'', sets:3}]}; render(); setTimeout(() => $('#tname')?.focus(), 30); break;
+    case 'tpl-edit': { const t = Store.docs[el.dataset.id]; S.editor = {id: el.dataset.id, name: t.name, order: t.order, exercises: clone(t.exercises)}; render(); window.scrollTo(0,0); break; }
+    case 'tex-minus': if (S.editor.exercises[i].sets > 1){ S.editor.exercises[i].sets--; render(); } break;
+    case 'tex-plus': if (S.editor.exercises[i].sets < 12){ S.editor.exercises[i].sets++; render(); } break;
+    case 'tex-del': if (!armOrGo(el)) return; S.editor.exercises.splice(i, 1); render(); break;
+    case 'tex-add': S.editor.exercises.push({name:'', sets:3}); render(); setTimeout(() => $(`#tex-${S.editor.exercises.length-1}`)?.focus(), 30); break;
+    case 'tpl-save': {
+      const e = S.editor; const exs = e.exercises.map(x => ({name: x.name.trim(), sets: x.sets})).filter(x => x.name);
+      if (!e.name.trim()){ toast('Gi malen et navn'); $('#tname')?.focus(); return; }
+      if (!exs.length){ toast('Legg til minst én øvelse'); return; }
+      const id = e.id || 'tpl_' + uid();
+      Store.put(id, {kind:'template', name: e.name.trim(), order: e.order ?? templates().length, exercises: exs});
+      S.editor = null; toast('Malen er lagret'); render(); break;
+    }
+    case 'tpl-cancel': S.editor = null; render(); break;
+    case 'tpl-del': if (!armOrGo(el)) return; Store.del(S.editor.id); S.editor = null; toast('Malen er slettet'); render(); break;
+    case 'hist-open': S.histId = el.dataset.id; render(); window.scrollTo(0,0); break;
+    case 'hist-back': S.histId = null; render(); break;
+    case 'hist-del': if (!armOrGo(el)) return; Store.del(S.histId); S.histId = null; toast('Økten er slettet'); render(); break;
+    case 'prog-ex': S.progEx = el.dataset.name; render(); break;
+    case 'metric': S.metric = el.dataset.k; render(); break;
+    case 'export': exportBackup(); break;
+  }
+});
+
+document.addEventListener('input', ev => {
+  const el = ev.target, f = el.dataset.f; if (!f) return;
+  const i = +el.dataset.i, j = +el.dataset.j;
+  if (f === 'wkname'){ S.active.name = el.value; saveActive(); }
+  else if (f === 'kg' || f === 'reps'){ S.active.exercises[i].sets[j][f] = el.value.replace(/[^\d.,]/g, ''); saveActive(); }
+  else if (f === 'tname') S.editor.name = el.value;
+  else if (f === 'tex') S.editor.exercises[i].name = el.value;
+});
+document.addEventListener('keydown', ev => {
+  if (ev.key !== 'Enter') return;
+  const el = ev.target;
+  if (el.id === 'addex'){ ev.preventDefault(); $('[data-act="ex-add"]').click(); }
+  else if (el.dataset.f === 'kg'){ ev.preventDefault(); $(`#reps-${el.dataset.i}-${el.dataset.j}`)?.focus(); }
+  else if (el.dataset.f === 'reps'){ ev.preventDefault(); el.blur(); }
+});
+document.addEventListener('focusin', ev => { if (ev.target.dataset && (ev.target.dataset.f === 'kg' || ev.target.dataset.f === 'reps')) setTimeout(() => { try { ev.target.select(); } catch(e){} }, 0); });
+let rw; window.addEventListener('resize', () => { clearTimeout(rw); rw = setTimeout(() => { if (S.tab === 'frem' && $('#chart')) $('#chart').innerHTML = chartSVG(series(S.progEx), S.metric); }, 200); });
+
+async function exportBackup(){
+  const docs = {...Store.docs}; delete docs.active;
+  const json = JSON.stringify({app:'snatched', version:1, exportedAt:new Date().toISOString(), docs}, null, 1);
+  const name = 'snatched-kopi-' + new Date().toISOString().slice(0,10) + '.json';
+  const file = new File([json], name, {type:'application/json'});
+  try { if (navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file], title:'Snatched sikkerhetskopi'}); return; } } catch(e){ if (e && e.name === 'AbortError') return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+document.addEventListener('change', ev => {
+  if (ev.target.id !== 'importf' || !ev.target.files[0]) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const d = JSON.parse(r.result);
+      if (!d || d.app !== 'snatched' || typeof d.docs !== 'object') throw 0;
+      let n = 0; for (const k in d.docs){ const v = d.docs[k]; if (v && (v.kind === 'session' || v.kind === 'template')){ Store.docs[k] = v; n++; } }
+      Store.saveLocal(); render(); toast(n + ' økter og maler gjenopprettet');
+    } catch(e){ toast('Filen er ikke en Snatched-kopi'); }
+  };
+  r.readAsText(ev.target.files[0]); ev.target.value = '';
+});
+
+render();
+Store.init();
+try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch(e){}
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
+</script>
+
+</body>
+</html>
