@@ -112,13 +112,18 @@ h2{font-family:var(--display);font-weight:400;font-size:24px;line-height:1.15;ma
 .bar .count b{display:block;font-size:22px;color:var(--sky);font-variant-numeric:tabular-nums}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bg-deep);border-top:1px solid var(--line-bg);
   padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
-nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
-nav.tabs button{min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:13px;font-weight:600;color:var(--muted-bg);border-radius:12px}
+nav.tabs::after{content:"";position:absolute;left:0;right:0;top:100%;height:200px;background:var(--bg-deep)}
+nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}
+nav.tabs button{min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:600;color:var(--muted-bg);border-radius:12px;min-width:0}
 nav.tabs button[aria-current="page"]{color:var(--on-sky);background:var(--sky)}
 nav.tabs .dot{width:7px;height:7px;border-radius:50%;background:var(--sky);display:inline-block;margin-left:4px;vertical-align:middle}
 
 /* Template editor */
-.ted{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center}
+.ted{display:flex;flex-direction:column;gap:8px;padding-bottom:14px;border-bottom:1px solid var(--line-bg)}
+.ted-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center}
+.tseg{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--bg-deep);border-radius:var(--r);padding:4px;height:56px;min-width:0}
+.tseg button{border-radius:10px;font-weight:600;font-size:15px;color:var(--muted-bg);min-width:0}
+.tseg button[aria-pressed="true"]{background:var(--surface);color:var(--brand)}
 .stepper{display:grid;grid-template-columns:44px 40px 44px;align-items:center;border-radius:var(--r);height:56px;background:var(--surface);color:var(--ink)}
 .stepper button{height:100%;font-size:22px;color:var(--brand);font-weight:700}
 .stepper span{text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
@@ -177,6 +182,57 @@ table.log td:first-child,table.log th:first-child{text-align:left}
 
 .toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--sky);color:var(--on-sky);padding:12px 18px;border-radius:12px;font-size:15px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:20;max-width:calc(100% - 32px);text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.25)}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.mnav{display:grid;grid-template-columns:52px 1fr 52px;align-items:center;gap:8px;margin:4px 0 12px}
+.mnav b{font-family:var(--display);font-weight:400;font-size:24px;text-align:center;text-transform:capitalize}
+.mnav button{height:52px;border-radius:50%;border:1.5px solid var(--line-bg);color:var(--on-bg);font-size:24px;line-height:1}
+.wkd,.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.wkd span{text-align:center;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-bg);font-weight:700;padding-bottom:4px}
+.day{min-height:52px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--on-bg);font-weight:600;font-size:17px;font-variant-numeric:tabular-nums;min-width:0}
+.day.out{opacity:.3}
+.day.today{box-shadow:inset 0 0 0 2px var(--sky)}
+.day.done{background:var(--sky);color:var(--on-sky)}
+.day.sel{background:var(--surface);color:var(--brand);box-shadow:inset 0 0 0 2px var(--surface)}
+.mk{display:flex;gap:3px;height:7px}
+.mk i{width:7px;height:7px;border-radius:50%;display:block}
+.mk i.p{border:1.5px solid var(--sky)}
+.day.done .mk i.p{border-color:var(--on-sky)}
+.day.sel .mk i.p{border-color:var(--brand)}
+.mk i.m{background:var(--muted-bg)}
+.day.sel .mk i.m{background:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:14px;color:var(--muted-bg)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+.cal-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.cal-item:last-child{border-bottom:0}
+.cal-item b{display:block;font-weight:700}
+.cal-item small{display:block;color:var(--muted);font-size:14px}
+.cal-item .btn{min-height:48px;font-size:16px;padding:0 16px}
+.tag{display:inline-block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:2px}
+.tag.d{background:var(--sky);color:var(--on-sky)}
+.tag.p{border:1.5px solid var(--sky);color:var(--on-sky)}
+.tag.m{background:var(--surface-2);color:var(--muted)}
+.ex .chip{border-color:var(--line);color:var(--ink)}
+.ex .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.ex .chips{flex-wrap:wrap;overflow:visible}
+.toggle{display:flex;align-items:center;gap:12px;min-height:52px;width:100%;text-align:left;color:var(--ink);font-size:16px}
+.toggle .bx{flex:none;width:28px;height:28px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;color:transparent}
+.toggle[aria-pressed="true"] .bx{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.today-tag{font-style:normal;display:inline-block;background:var(--sky);color:var(--on-sky);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:2px 8px;margin-right:6px;vertical-align:1px}
+.set.c{grid-template-columns:30px repeat(3,minmax(0,1fr)) 56px;gap:6px}
+.set.c input{font-size:20px}
+.rpe-h{margin:16px 0 8px;font-size:15px;color:var(--muted)}
+.rpe-h b{color:var(--ink)}
+.rpe{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.rpe button{min-height:50px;border-radius:12px;background:var(--surface-2);font-weight:700;font-size:18px;color:var(--ink);font-variant-numeric:tabular-nums}
+.rpe button.lit{background:var(--sky-soft);color:var(--on-sky)}
+.rpe button[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink)}
+.kind{display:inline-block;font-family:var(--body);font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:8px;vertical-align:4px;background:var(--sky-soft);color:var(--on-sky)}
+.rounds{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-top:12px;padding:10px 10px 10px 14px;border-radius:12px;background:var(--sky-soft);color:var(--on-sky)}
+.rounds b{display:block;font-size:16px}
+.rounds small{display:block;font-size:14px;opacity:.85;font-variant-numeric:tabular-nums}
+.ted-r{display:grid;grid-template-columns:minmax(0,1fr) auto 44px;gap:8px;align-items:center;color:var(--muted-bg);font-size:15px;font-weight:600}
+.seg.two{grid-template-columns:1fr 1fr;margin:0 0 10px}
+.start-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
 
@@ -205,6 +261,13 @@ const dLong = t => new Date(t).toLocaleDateString('nb-NO', {weekday:'long', day:
 const clock = t => new Date(t).toLocaleTimeString('nb-NO', {hour:'2-digit', minute:'2-digit'});
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const clone = o => JSON.parse(JSON.stringify(o));
+const ymd = t => { const d = new Date(t); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+const fromYmd = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d).getTime(); };
+const isC = e => e && e.type === 'cardio';
+const cardioStr = s => [num(s.min) != null ? `${fmt(num(s.min))} min` : '', num(s.km) != null ? `${fmt(num(s.km),2)} km` : '', num(s.lvl) != null ? `nivå ${fmt(num(s.lvl))}` : ''].filter(Boolean).join(' · ') || '–';
+const rnd = e => Math.max(1, Math.round(+(e && e.rounds) || 1));
+const cardioLine = (sets, r) => { const t = sets.map(cardioStr).join(', '); return r > 1 ? `${r} × ${sets.length > 1 ? '(' + t + ')' : t}` : t; };
+const rpeLabel = v => !v ? '' : v <= 2 ? 'Veldig lett' : v <= 4 ? 'Lett' : v <= 6 ? 'Moderat' : v <= 8 ? 'Hard' : v === 9 ? 'Veldig hard' : 'Maks';
 const setStr = s => `${fmt(num(s.kg))}×${num(s.reps) ?? '–'}`;
 const ICON = {
   check:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
@@ -212,6 +275,7 @@ const ICON = {
   okt:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9v6M6 6.5v11M18 6.5v11M21 9v6M6 12h12"/></svg>',
   maler:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>',
   hist:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  kal:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
   frem:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M5 15l4.5-4.5 3.5 3L19 7"/><path d="M15 7h4v4"/></svg>'
 };
 
@@ -285,7 +349,13 @@ const templates = () => Object.entries(Store.docs).filter(([k,v]) => v && v.kind
 const sessions = () => Object.entries(Store.docs).filter(([k,v]) => v && v.kind === 'session').map(([k,v]) => ({id:k, ...v})).sort((a,b) => b.finishedAt - a.finishedAt);
 function lastFor(name){
   const k = key(name);
-  for (const s of sessions()){ const ex = s.exercises.find(e => key(e.name) === k); if (ex && ex.sets.length) return {date: s.finishedAt, sets: ex.sets}; }
+  for (const s of sessions()){ const ex = s.exercises.find(e => key(e.name) === k); if (ex && ex.sets.length) return {date: s.finishedAt, sets: ex.sets, rpe: ex.rpe || null, rounds: rnd(ex)}; }
+  return null;
+}
+function exType(name){
+  const k = key(name);
+  for (const s of sessions()) for (const e of s.exercises) if (key(e.name) === k) return isC(e) ? 'cardio' : 'strength';
+  for (const t of templates()) for (const e of t.exercises) if (key(e.name) === k) return isC(e) ? 'cardio' : 'strength';
   return null;
 }
 function exerciseNames(){
@@ -294,11 +364,19 @@ function exerciseNames(){
   for (const t of templates()) for (const e of t.exercises){ const k = key(e.name); if (!m.has(k)) m.set(k, {name:e.name, n:0}); }
   return [...m.values()];
 }
-const sessVolume = s => s.exercises.reduce((a,e) => a + e.sets.reduce((b,x) => b + (x.kg||0)*(x.reps||0), 0), 0);
-const sessSets = s => s.exercises.reduce((a,e) => a + e.sets.length, 0);
+const plans = () => Object.entries(Store.docs).filter(([k,v]) => v && v.kind === 'plan').map(([k,v]) => ({id:k, ...v})).sort((a,b) => a.date.localeCompare(b.date));
+const sessVolume = s => s.exercises.reduce((a,e) => a + (isC(e) ? 0 : e.sets.reduce((b,x) => b + (x.kg||0)*(x.reps||0), 0)), 0);
+const sessSets = s => s.exercises.reduce((a,e) => a + (isC(e) ? 0 : e.sets.length), 0);
+const sessCardio = s => s.exercises.filter(isC).reduce((a,e) => { const r = rnd(e); e.sets.forEach(x => { a.min += (x.min||0)*r; a.km += (x.km||0)*r; }); return a; }, {min:0, km:0});
+function sessLine(s){
+  const p = [], n = sessSets(s), c = sessCardio(s);
+  if (n) p.push(`${n} sett · ${fmt(sessVolume(s)/1000)} tonn`);
+  if (c.min || c.km) p.push([c.min ? `${fmt(c.min)} min` : '', c.km ? `${fmt(c.km,2)} km` : ''].filter(Boolean).join(' · ') + ' kardio');
+  return p.join(' · ') || 'Ingen sett';
+}
 
 /* ---------- app state ---------- */
-const S = { tab:'okt', active:null, summary:null, editor:null, histId:null, progEx:null, metric:'e1rm', loadedActive:false, needsRender:false };
+const S = { tab:'okt', active:null, summary:null, editor:null, histId:null, progEx:null, metric:'e1rm', cmetric:'min', addType:'strength', calMonth:null, calDay:null, planTpl:null, planRepeat:false, loadedActive:false, needsRender:false };
 let saveT;
 function saveActive(now){
   clearTimeout(saveT);
@@ -331,7 +409,7 @@ const STARTERS = [
 /* ---------- views ---------- */
 function render(){
   $('#today').textContent = dLong(Date.now());
-  const tabs = [['okt','Økt'],['maler','Maler'],['hist','Historikk'],['frem','Fremgang']];
+  const tabs = [['okt','Økt'],['maler','Maler'],['kal','Kalender'],['hist','Historikk'],['frem','Fremgang']];
   $('#tabs').innerHTML = tabs.map(([k,l]) => `<button data-act="tab" data-k="${k}" ${S.tab===k?'aria-current="page"':''}>${ICON[k]}<span>${l}${k==='okt'&&S.active&&S.tab!=='okt'?'<i class="dot"></i>':''}</span></button>`).join('');
   $('#exlist').innerHTML = exerciseNames().map(e => `<option value="${esc(e.name)}">`).join('');
   const m = $('#main'); const bar = $('#bar');
@@ -339,24 +417,29 @@ function render(){
   if (S.tab === 'okt') m.innerHTML = S.summary ? vSummary() : S.active ? vWorkout() : vStart();
   else if (S.tab === 'maler') m.innerHTML = S.editor ? vEditor() : vTemplates();
   else if (S.tab === 'hist') m.innerHTML = S.histId ? vSession() : vHistory();
+  else if (S.tab === 'kal') m.innerHTML = vCalendar();
   else m.innerHTML = vProgress();
   if (S.tab === 'okt' && S.active && !S.summary){ bar.hidden = false; $('#wrap').classList.add('has-bar'); bar.innerHTML = vBar(); }
 }
 
 function vStart(){
   const ts = templates(); const last = sessions()[0];
-  let h = `<h1>Hva trener du i dag?</h1><p class="lede">${last ? `Forrige økt: ${esc(last.name)}, ${dShort(last.finishedAt)}.` : 'Velg en mal, så henter Snatched vektene fra sist.'}</p>`;
+  const next = plans().find(p => p.date > ymd(Date.now()));
+  let h = `<h1>Hva trener du i dag?</h1><p class="lede">${last ? `Forrige økt: ${esc(last.name)}, ${dShort(last.finishedAt)}` : 'Velg en mal, så henter Snatched vektene fra sist.'}${next ? ` Neste planlagte: ${esc(next.name)}, ${dShort(fromYmd(next.date))}.` : ''}</p>`;
   if (!ts.length){
     h += `<div class="empty"><h2>Ingen maler ennå</h2><p>Lag din egen under Maler, eller start med to forslag du kan endre etterpå:</p>
       <ul class="sug">${STARTERS.map(t => `<li><b>${t.name}:</b> ${t.exercises.map(e=>e.name).join(', ')}</li>`).join('')}</ul>
       <button class="btn primary block" data-act="starters">Legg til forslagene</button></div>`;
   } else {
+    const todayPlan = new Set(plans().filter(p => p.date === ymd(Date.now())).map(p => p.templateId));
+    ts.sort((a,b) => (todayPlan.has(b.id) ? 1 : 0) - (todayPlan.has(a.id) ? 1 : 0));
     h += `<div class="stack">` + ts.map(t => {
       const lastT = sessions().find(s => s.templateId === t.id);
-      return `<button class="launch" data-act="start" data-id="${t.id}"><span class="t"><b>${esc(t.name)}</b><span>${t.exercises.length} øvelser${lastT ? ' · sist ' + dShort(lastT.finishedAt) : ''}</span></span><span class="go">${ICON.play}</span></button>`;
+      const pl = todayPlan.has(t.id);
+      return `<button class="launch" data-act="start" data-id="${t.id}"><span class="t"><b>${esc(t.name)}</b><span>${pl ? '<i class="today-tag">Planlagt i dag</i>' : ''}${t.exercises.length} øvelser${lastT ? ' · sist ' + dShort(lastT.finishedAt) : ''}</span></span><span class="go">${ICON.play}</span></button>`;
     }).join('') + `</div>`;
   }
-  h += `<div class="stack" style="margin-top:12px"><button class="btn ghost block" data-act="start-empty">Start tom økt</button></div>`;
+  h += `<div class="start-grid"><button class="btn ghost" data-act="start-empty">Tom styrkeøkt</button><button class="btn ghost" data-act="start-cardio">Kardioøkt</button></div>`;
   return h;
 }
 
@@ -366,6 +449,7 @@ function vWorkout(){
     <p class="lede" style="margin-top:4px">Startet ${clock(a.startedAt)} · fyll inn og huk av hvert sett</p><div class="stack">`;
   a.exercises.forEach((ex, i) => {
     const p = ex.prev;
+    if (isC(ex)){ h += vCardioEx(ex, i); return; }
     h += `<section class="ex"><div class="ex-h"><h2>${esc(ex.name)}</h2><button class="link" data-act="ex-del" data-i="${i}" data-confirm="Fjern?">Fjern</button></div>
       <p class="prev">${p ? `Forrige · ${dShort(p.date)}: <b class="num">${p.sets.map(setStr).join(', ')}</b>` : 'Ny øvelse. Ingen tidligere logg.'}</p>
       <div class="sets"><div class="set head"><span>Sett</span><span>kg</span><span>Reps</span><span></span></div>`;
@@ -377,23 +461,49 @@ function vWorkout(){
     });
     h += `</div><div class="ex-foot"><button class="btn soft" data-act="set-add" data-i="${i}">+ Sett</button><button class="btn ghost" data-act="set-del" data-i="${i}" ${ex.sets.length<=1?'disabled':''}>− Sett</button></div></section>`;
   });
-  h += `</div><p class="eyebrow">Legg til øvelse</p><div class="addex"><input class="field" id="addex" list="exlist" placeholder="F.eks. Pull-ups" autocomplete="off" enterkeyhint="done"><button class="btn primary" data-act="ex-add">Legg til</button></div>
+  h += `</div><p class="eyebrow">Legg til øvelse</p><div class="seg two" role="group" aria-label="Type øvelse"><button data-act="addtype" data-k="strength" aria-pressed="${S.addType==='strength'}">Styrke</button><button data-act="addtype" data-k="cardio" aria-pressed="${S.addType==='cardio'}">Kardio</button></div><div class="addex"><input class="field" id="addex" list="exlist" placeholder="${S.addType==='cardio' ? 'F.eks. Tredemølle' : 'F.eks. Pull-ups'}" autocomplete="off" enterkeyhint="done"><button class="btn primary" data-act="ex-add">Legg til</button></div>
     <div style="margin-top:28px;text-align:center"><button class="link" data-act="discard" data-confirm="Trykk igjen for å forkaste økten">Forkast økten</button></div>`;
+  return h;
+}
+function vCardioEx(ex, i){
+  const p = ex.prev, r = +ex.rpe || 0;
+  let h = `<section class="ex"><div class="ex-h"><h2>${esc(ex.name)}<span class="kind">Kardio</span></h2><button class="link" data-act="ex-del" data-i="${i}" data-confirm="Fjern?">Fjern</button></div>
+    <p class="prev">${p ? `Forrige · ${dShort(p.date)}: <b class="num">${cardioLine(p.sets, p.rounds || 1)}${p.rpe ? ` · RPE ${p.rpe}` : ''}</b>` : 'Ny aktivitet. Ingen tidligere logg.'}</p>
+    <div class="sets"><div class="set c head"><span>${ex.sets.length > 1 ? 'Del' : ''}</span><span>Min</span><span>km</span><span>Nivå</span><span></span></div>`;
+  ex.sets.forEach((s, j) => {
+    h += `<div class="set c${s.done?' done':''}" id="set-${i}-${j}"><span class="n num">${ex.sets.length > 1 ? j+1 : ''}</span>
+      <input id="min-${i}-${j}" data-f="min" data-i="${i}" data-j="${j}" inputmode="decimal" enterkeyhint="next" value="${esc(s.min)}" placeholder="min" aria-label="Minutter">
+      <input id="km-${i}-${j}" data-f="km" data-i="${i}" data-j="${j}" inputmode="decimal" enterkeyhint="next" value="${esc(s.km)}" placeholder="km" aria-label="Distanse i km">
+      <input id="lvl-${i}-${j}" data-f="lvl" data-i="${i}" data-j="${j}" inputmode="decimal" enterkeyhint="done" value="${esc(s.lvl)}" placeholder="nivå" aria-label="Nivå eller stigning">
+      <button class="chk" data-act="done" data-i="${i}" data-j="${j}" aria-pressed="${!!s.done}" aria-label="Ferdig">${ICON.check}</button></div>`;
+  });
+  const R = rnd(ex), tMin = ex.sets.reduce((a,x) => a + (num(x.min)||0), 0) * R, tKm = ex.sets.reduce((a,x) => a + (num(x.km)||0), 0) * R;
+  h += `</div><div class="rounds"><div><b>Gjenta ${R > 1 ? R + ' ganger' : 'ikke'}</b><small>${R > 1 ? `${ex.sets.length} ${ex.sets.length === 1 ? 'del' : 'deler'} × ${R} runder` : 'Én runde'}${tMin ? ` · ${fmt(tMin)} min` : ''}${tKm ? ` · ${fmt(tKm,2)} km` : ''} totalt</small></div>
+    <div class="stepper"><button data-act="rounds-minus" data-i="${i}" aria-label="Færre runder">−</button><span>×${R}</span><button data-act="rounds-plus" data-i="${i}" aria-label="Flere runder">+</button></div></div>
+    <p class="rpe-h">Hvor hardt var det? <b>${r ? `${r} · ${rpeLabel(r)}` : 'Velg 1–10'}</b></p><div class="rpe" role="group" aria-label="Intensitet 1 til 10">`;
+  for (let v = 1; v <= 10; v++) h += `<button class="num${r && v < r ? ' lit' : ''}" data-act="rpe" data-i="${i}" data-v="${v}" aria-pressed="${v === r}">${v}</button>`;
+  h += `</div><div class="ex-foot"><button class="btn soft" data-act="set-add" data-i="${i}">+ Del</button><button class="btn ghost" data-act="set-del" data-i="${i}" ${ex.sets.length<=1?'disabled':''}>− Del</button></div></section>`;
   return h;
 }
 function doneCount(){ let d=0,t=0; S.active.exercises.forEach(e => e.sets.forEach(s => { t++; if (s.done) d++; })); return [d,t]; }
 function vBar(){
   const [d,t] = doneCount();
-  return `<div class="in"><div class="count" id="count"><b>${d}/${t}</b>sett</div><button class="btn primary big block" data-act="finish" data-confirm="Lagre ${d} sett?">Fullfør økt</button></div>`;
+  const lbl = S.active.exercises.some(isC) ? 'ferdig' : 'sett';
+  return `<div class="in"><div class="count" id="count"><b>${d}/${t}</b>${lbl}</div><button class="btn primary big block" data-act="finish" data-confirm="Lagre ${d} sett?">Fullfør økt</button></div>`;
 }
 
 function vSummary(){
   const s = Store.docs[S.summary.id]; if (!s){ S.summary = null; return vStart(); }
   const mins = Math.max(1, Math.round((s.finishedAt - s.startedAt)/60000));
   let h = `<div class="done-hero"><h1>Bra jobba.</h1><p>${esc(s.name)} · ${dLong(s.finishedAt)}</p>
-    <div class="tiles"><div class="tile"><span>Sett</span><b>${sessSets(s)}</b></div><div class="tile"><span>Volum</span><b>${fmt(sessVolume(s)/1000)}</b><small>tonn</small></div><div class="tile"><span>Tid</span><b>${mins}</b><small>min</small></div></div></div>`;
+    <div class="tiles">${(() => { const n = sessSets(s), c = sessCardio(s); const t = [];
+      if (n) t.push(`<div class="tile"><span>Sett</span><b>${n}</b></div>`);
+      if (n && !c.min) t.push(`<div class="tile"><span>Volum</span><b>${fmt(sessVolume(s)/1000)}</b><small>tonn</small></div>`);
+      if (c.min) t.push(`<div class="tile"><span>Kardio</span><b>${fmt(c.min)}</b><small>min</small></div>`);
+      if (!n && c.km) t.push(`<div class="tile"><span>Distanse</span><b>${fmt(c.km,2)}</b><small>km</small></div>`);
+      t.push(`<div class="tile"><span>Tid</span><b>${mins}</b><small>min</small></div>`); return t.slice(-3).join(''); })()}</div></div>`;
   if (S.summary.prs.length){
-    h += `<p class="eyebrow">Nye rekorder (estimert 1RM)</p><div class="stack">` + S.summary.prs.map(p => `<div class="pr">${esc(p.name)}<span>${fmt(p.val)} kg</span></div>`).join('') + `</div>`;
+    h += `<p class="eyebrow">Nye rekorder</p><div class="stack">` + S.summary.prs.map(p => `<div class="pr">${esc(p.name)}<span>${p.unit === 'km' ? `${fmt(p.val,2)} km` : `${fmt(p.val)} kg 1RM`}</span></div>`).join('') + `</div>`;
   }
   h += `<div class="stack" style="margin-top:24px">`;
   if (S.summary.tplId && Store.docs[S.summary.tplId] && S.summary.changed) h += `<button class="btn sky block" data-act="tpl-sync">Oppdater malen «${esc(Store.docs[S.summary.tplId].name)}» med denne økten</button>`;
@@ -407,7 +517,7 @@ function vTemplates(){
   if (!ts.length) h += `<div class="empty"><h2>Ingen maler ennå</h2><p>En mal er en liste med øvelser og antall sett. Lag din første, eller legg inn to forslag.</p><div class="stack"><button class="btn primary block" data-act="tpl-new">Ny mal</button><button class="btn soft block" data-act="starters">Legg til forslagene</button></div></div>`;
   else {
     h += `<div class="stack">` + ts.map(t => `<div class="ex"><div class="ex-h"><h2>${esc(t.name)}</h2><button class="link" data-act="tpl-edit" data-id="${t.id}">Rediger</button></div>
-      <p class="prev">${t.exercises.map(e => `${esc(e.name)} <span class="num">${e.sets}×</span>`).join(' · ')}</p>
+      <p class="prev">${t.exercises.map(e => `${esc(e.name)} <span class="num">${isC(e) ? (e.sets > 1 ? e.sets + ' deler' : 'kardio') + (rnd(e) > 1 ? ' ×' + rnd(e) : '') : e.sets + '×'}</span>`).join(' · ')}</p>
       <button class="btn primary block" data-act="start" data-id="${t.id}">${ICON.play} Start økt</button></div>`).join('') + `</div>
       <div class="stack" style="margin-top:12px"><button class="btn soft block" data-act="tpl-new">+ Ny mal</button></div>`;
   }
@@ -416,11 +526,14 @@ function vTemplates(){
 function vEditor(){
   const e = S.editor;
   let h = `<input class="field title-in" id="tname" data-f="tname" value="${esc(e.name)}" placeholder="Navn på malen" aria-label="Navn på malen">
-    <p class="lede" style="margin-top:6px">Øvelser og antall sett</p><div class="stack">`;
+    <p class="lede" style="margin-top:6px">Øvelser, type og antall sett. For kardio er tallet antall deler, og «Gjenta» er hvor mange runder du tar av dem.</p><div class="stack">`;
   e.exercises.forEach((x, i) => {
-    h += `<div class="ted"><input class="field" id="tex-${i}" data-f="tex" data-i="${i}" list="exlist" value="${esc(x.name)}" placeholder="Øvelse" autocomplete="off">
-      <div class="stepper"><button data-act="tex-minus" data-i="${i}" aria-label="Færre sett">−</button><span>${x.sets}</span><button data-act="tex-plus" data-i="${i}" aria-label="Flere sett">+</button></div>
-      <button class="x" data-act="tex-del" data-i="${i}" data-confirm="✓" aria-label="Fjern øvelse">×</button></div>`;
+    const c = isC(x);
+    h += `<div class="ted"><input class="field" id="tex-${i}" data-f="tex" data-i="${i}" list="exlist" value="${esc(x.name)}" placeholder="${c ? 'Aktivitet, f.eks. Romaskin' : 'Øvelse'}" autocomplete="off">
+      <div class="ted-row"><div class="tseg" role="group" aria-label="Type"><button data-act="tex-type" data-i="${i}" data-k="strength" aria-pressed="${!c}">Styrke</button><button data-act="tex-type" data-i="${i}" data-k="cardio" aria-pressed="${c}">Kardio</button></div>
+      <div class="stepper"><button data-act="tex-minus" data-i="${i}" aria-label="Færre">−</button><span>${x.sets}</span><button data-act="tex-plus" data-i="${i}" aria-label="Flere">+</button></div>
+      <button class="x" data-act="tex-del" data-i="${i}" data-confirm="✓" aria-label="Fjern øvelse">×</button></div>
+      ${c ? `<div class="ted-r"><span>Gjenta alle delene</span><div class="stepper"><button data-act="tex-rminus" data-i="${i}" aria-label="Færre runder">−</button><span>×${rnd(x)}</span><button data-act="tex-rplus" data-i="${i}" aria-label="Flere runder">+</button></div><span></span></div>` : ''}</div>`;
   });
   h += `</div><button class="btn soft block" style="margin-top:12px" data-act="tex-add">+ Øvelse</button>
     <div class="stack" style="margin-top:24px"><button class="btn primary block big" data-act="tpl-save">Lagre mal</button><button class="btn ghost block" data-act="tpl-cancel">Avbryt</button></div>`;
@@ -440,19 +553,24 @@ function vHistory(){
     if (mo !== cur){ cur = mo; h += `<p class="eyebrow">${mo}</p>`; }
     const d = new Date(s.finishedAt);
     h += `<button class="hist" data-act="hist-open" data-id="${s.id}"><span class="d"><b class="num">${d.getDate()}</b><span>${d.toLocaleDateString('nb-NO',{weekday:'short'})}</span></span>
-      <span class="m"><b>${esc(s.name)}</b><span>${s.exercises.map(e=>esc(e.name)).join(', ')}</span></span><span class="v num">${sessSets(s)} sett<br>${fmt(sessVolume(s)/1000)} t</span></button>`;
+      <span class="m"><b>${esc(s.name)}</b><span>${s.exercises.map(e=>esc(e.name)).join(', ')}</span></span><span class="v num">${(() => { const n = sessSets(s), c = sessCardio(s); return n ? `${n} sett<br>${fmt(sessVolume(s)/1000)} t` : `${fmt(c.min)} min${c.km ? `<br>${fmt(c.km,1)} km` : ''}`; })()}</span></button>`;
   }
   return h + vBackup();
 }
 function vBackup(){
-  return `<p class="eyebrow">Sikkerhetskopi</p><div class="ex"><p style="margin:0;color:var(--muted);font-size:15px">Øktene og malene lagres bare på denne telefonen. Last ned en kopi innimellom, så kan du gjenopprette alt på en ny telefon.</p>
+  return `<p class="eyebrow">Sikkerhetskopi</p><div class="ex"><p style="margin:0;color:var(--muted);font-size:15px">Øktene, malene og planen lagres bare på denne telefonen. Last ned en kopi innimellom, så kan du gjenopprette alt på en ny telefon.</p>
     <div class="ex-foot"><button class="btn primary" data-act="export">Last ned kopi</button><label class="btn ghost" for="importf">Gjenopprett</label></div>
     <input type="file" id="importf" accept="application/json,.json" hidden></div>`;
 }
 function vSession(){
   const s = Store.docs[S.histId]; if (!s){ S.histId = null; return vHistory(); }
-  let h = `<button class="link" data-act="hist-back">← Historikk</button><h1>${esc(s.name)}</h1><p class="lede">${dLong(s.finishedAt)} · ${clock(s.startedAt)}–${clock(s.finishedAt)} · ${fmt(sessVolume(s))} kg volum</p><div class="stack">`;
+  let h = `<button class="link" data-act="hist-back">← Historikk</button><h1>${esc(s.name)}</h1><p class="lede">${dLong(s.finishedAt)} · ${clock(s.startedAt)}–${clock(s.finishedAt)} · ${sessLine(s)}</p><div class="stack">`;
   for (const e of s.exercises){
+    if (isC(e)){
+      h += `<div class="ex"><h2>${esc(e.name)}<span class="kind">Kardio</span></h2>${e.rpe || rnd(e) > 1 ? `<p class="prev">${rnd(e) > 1 ? `Gjentatt <b>${rnd(e)} ganger</b>${e.rpe ? ' · ' : ''}` : ''}${e.rpe ? `Intensitet: <b>RPE ${e.rpe} · ${rpeLabel(e.rpe)}</b>` : ''}</p>` : ''}<table class="log" style="margin-top:8px"><thead><tr><th>Del</th><th>Min</th><th>km</th><th>Nivå</th></tr></thead><tbody>` +
+        e.sets.map((x,j) => `<tr><td>${j+1}</td><td>${fmt(x.min)}</td><td>${x.km != null ? fmt(x.km,2) : '–'}</td><td>${x.lvl != null ? fmt(x.lvl) : '–'}</td></tr>`).join('') + `</tbody></table></div>`;
+      continue;
+    }
     h += `<div class="ex"><h2>${esc(e.name)}</h2><table class="log" style="margin-top:8px"><thead><tr><th>Sett</th><th>kg</th><th>Reps</th><th>e1RM</th></tr></thead><tbody>` +
       e.sets.map((x,j) => `<tr><td>${j+1}</td><td>${fmt(x.kg)}</td><td>${x.reps}</td><td>${fmt(e1rm(x.kg,x.reps))}</td></tr>`).join('') + `</tbody></table></div>`;
   }
@@ -460,11 +578,88 @@ function vSession(){
   return h;
 }
 
+function vCalendar(){
+  const now = new Date(), today = ymd(now);
+  if (!S.calMonth) S.calMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+  if (!S.calDay) S.calDay = today;
+  const m0 = new Date(S.calMonth), Y = m0.getFullYear(), M = m0.getMonth();
+  const days = new Date(Y, M+1, 0).getDate(), off = (m0.getDay() + 6) % 7;
+  const cells = Math.ceil((off + days) / 7) * 7;
+  const byDay = {}; const add = (d, k, v) => { (byDay[d] = byDay[d] || {done:[], plan:[]})[k].push(v); };
+  sessions().forEach(s => add(ymd(s.finishedAt), 'done', s));
+  plans().forEach(p => add(p.date, 'plan', p));
+  const monthKey = `${Y}-${String(M+1).padStart(2,'0')}`;
+  const doneN = sessions().filter(s => ymd(s.finishedAt).startsWith(monthKey)).length;
+  const planN = plans().filter(p => p.date.startsWith(monthKey) && p.date >= today).length;
+  let h = `<h1>Kalender</h1><p class="lede">${doneN} ${doneN===1?'økt':'økter'} fullført${planN ? ` · ${planN} planlagt` : ''} denne måneden</p>
+    <div class="mnav"><button data-act="cal-prev" aria-label="Forrige måned">‹</button><b>${m0.toLocaleDateString('nb-NO',{month:'long', year:'numeric'})}</b><button data-act="cal-next" aria-label="Neste måned">›</button></div>
+    <div class="wkd">${['Ma','Ti','On','To','Fr','Lø','Sø'].map(d => `<span>${d}</span>`).join('')}</div><div class="cal">`;
+  for (let c = 0; c < cells; c++){
+    const d = new Date(Y, M, c - off + 1), k = ymd(d), info = byDay[k] || {done:[], plan:[]};
+    const out = d.getMonth() !== M;
+    const cls = ['day', out?'out':'', k===today?'today':'', info.done.length?'done':'', k===S.calDay?'sel':''].join(' ');
+    const mk = info.plan.map(p => `<i class="${p.date < today ? 'm' : 'p'}"></i>`).slice(0,3).join('');
+    h += `<button class="${cls}" data-act="cal-day" data-d="${k}" aria-label="${dLong(d)}${info.done.length?', trent':''}${info.plan.length?', planlagt':''}"><span>${d.getDate()}</span><span class="mk">${mk}</span></button>`;
+  }
+  h += `</div><div class="legend"><span><i style="background:var(--sky)"></i>Trent</span><span><i style="border:1.5px solid var(--sky)"></i>Planlagt</span><span><i style="background:var(--muted-bg)"></i>Planlagt, ikke gjort</span></div>`;
+
+  // selected day
+  const sel = S.calDay, info = byDay[sel] || {done:[], plan:[]};
+  h += `<p class="eyebrow">${dLong(fromYmd(sel))}</p><div class="ex">`;
+  if (!info.done.length && !info.plan.length) h += `<p style="margin:0 0 4px;color:var(--muted)">${sel < today ? 'Ingen økt denne dagen.' : 'Ingenting planlagt ennå.'}</p>`;
+  info.done.forEach(s => { h += `<div class="cal-item"><div><b>${esc(s.name)}<span class="tag d">Fullført</span></b><small>${sessLine(s)} · ${clock(s.startedAt)}</small></div><button class="btn ghost" data-act="cal-open" data-id="${s.id}">Se økt</button></div>`; });
+  info.plan.forEach(p => {
+    const missed = sel < today, tpl = Store.docs[p.templateId];
+    h += `<div class="cal-item"><div><b>${esc(tpl ? tpl.name : p.name)}<span class="tag ${missed?'m':'p'}">${missed?'Ikke gjort':'Planlagt'}</span></b><small>${tpl ? tpl.exercises.length + ' øvelser' : 'Malen er slettet'}</small></div>
+      <div class="row">${sel === today && tpl && !S.active ? `<button class="btn primary" data-act="start" data-id="${p.templateId}">Start</button>` : ''}<button class="link" data-act="plan-del" data-id="${p.id}" data-confirm="Fjerne?">Fjern</button></div></div>`;
+  });
+  if (sel >= today){
+    const ts = templates();
+    h += `<p style="margin:16px 0 8px;font-weight:700">Planlegg økt</p>`;
+    if (!ts.length) h += `<p style="margin:0;color:var(--muted)">Lag en mal under Maler først, så kan du planlegge den her.</p>`;
+    else {
+      if (!S.planTpl || !Store.docs[S.planTpl]) S.planTpl = ts[0].id;
+      h += `<div class="chips" role="group" aria-label="Velg mal">${ts.map(t => `<button class="chip" data-act="plan-tpl" data-id="${t.id}" aria-pressed="${t.id===S.planTpl}">${esc(t.name)}</button>`).join('')}</div>
+        <button class="toggle" data-act="plan-rep" aria-pressed="${S.planRepeat}"><span class="bx">${ICON.check.replace(/28/g,'18')}</span>Gjenta hver ${fromYmd(sel) ? new Date(fromYmd(sel)).toLocaleDateString('nb-NO',{weekday:'long'}) : 'uke'} de neste 8 ukene</button>
+        <button class="btn primary block" data-act="plan-add" style="margin-top:6px">Legg til i planen</button>`;
+    }
+  }
+  h += `</div>`;
+  return h;
+}
+
 const METRICS = {e1rm:['Est. 1RM','kg'], top:['Toppvekt','kg'], vol:['Volum','kg']};
+const CMETRICS = {min:['Tid','min'], km:['Distanse','km'], rpe:['Intensitet','RPE']};
+function seriesC(name){
+  const k = key(name);
+  return sessions().slice().reverse().map(s => {
+    const e = s.exercises.find(x => key(x.name) === k); if (!e || !isC(e) || !e.sets.length) return null;
+    const r = rnd(e);
+    return {t:s.finishedAt, min:e.sets.reduce((a,x)=>a+(x.min||0),0)*r, km:e.sets.reduce((a,x)=>a+(x.km||0),0)*r, rpe:e.rpe||0, sets:e.sets, rounds:r};
+  }).filter(Boolean);
+}
+function chartFor(name){
+  if (exType(name) === 'cardio'){ const m = S.cmetric; return chartSVG(seriesC(name).filter(p => p[m] > 0), m, CMETRICS[m][0], CMETRICS[m][1]); }
+  return chartSVG(series(name), S.metric, METRICS[S.metric][0], 'kg');
+}
+function vProgressC(h){
+  const all = seriesC(S.progEx), m = S.cmetric, pts = all.filter(p => p[m] > 0);
+  h += `<div class="seg" role="group" aria-label="Mål">${Object.entries(CMETRICS).map(([k,[l]]) => `<button data-act="metric" data-k="${k}" aria-pressed="${m===k}">${l}</button>`).join('')}</div>
+    <div class="chart" id="chart">${pts.length ? chartFor(S.progEx) : `<p class="hint" style="padding:16px 10px">${m === 'km' ? 'Ingen distanse logget for denne aktiviteten ennå.' : 'Ingen intensitet logget ennå. Velg 1–10 under økten.'}</p>`}</div>`;
+  const maxMin = Math.max(...all.map(p => p.min)), maxKm = Math.max(...all.map(p => p.km));
+  const r = all.filter(p => p.rpe), avg = r.length ? r.reduce((a,p) => a + p.rpe, 0) / r.length : null;
+  h += `<div class="tiles"><div class="tile"><span>Lengste</span><b>${fmt(maxMin)}</b><small>min</small></div>
+    <div class="tile"><span>Distanse</span><b>${maxKm ? fmt(maxKm,1) : '–'}</b><small>${maxKm ? 'km, lengste' : 'ikke logget'}</small></div>
+    <div class="tile"><span>Snitt RPE</span><b>${avg ? fmt(avg) : '–'}</b><small>${all.length} økter</small></div></div>
+    <p class="eyebrow">Siste økter</p><div class="ex"><table class="log"><thead><tr><th>Dato</th><th>Økt</th><th>RPE</th></tr></thead><tbody>` +
+    all.slice().reverse().slice(0, 8).map(p => `<tr><td>${dShort(p.t)}</td><td>${cardioLine(p.sets, p.rounds)}</td><td>${p.rpe || '–'}</td></tr>`).join('') + `</tbody></table></div>
+    <p class="hint" style="margin-top:10px">RPE er hvor hard økten føltes, fra 1 (veldig lett) til 10 (maks).</p>`;
+  return h;
+}
 function series(name){
   const k = key(name);
   return sessions().slice().reverse().map(s => {
-    const e = s.exercises.find(x => key(x.name) === k); if (!e || !e.sets.length) return null;
+    const e = s.exercises.find(x => key(x.name) === k); if (!e || isC(e) || !e.sets.length) return null;
     let best = null;
     for (const x of e.sets){ const v = e1rm(x.kg, x.reps); if (!best || v > best.v) best = {v, kg:x.kg, reps:x.reps}; }
     return {t:s.finishedAt, e1rm:best.v, top:Math.max(...e.sets.map(x=>x.kg||0)), vol:e.sets.reduce((a,x)=>a+(x.kg||0)*(x.reps||0),0), best, sets:e.sets};
@@ -473,12 +668,13 @@ function series(name){
 function vProgress(){
   const names = exerciseNames().filter(e => e.n > 0).sort((a,b) => b.n - a.n || a.name.localeCompare(b.name,'nb'));
   let h = `<h1>Fremgang</h1>`;
-  if (!names.length) return h + `<div class="empty"><h2>Ingen data ennå</h2><p>Når du har fullført økter, ser du utviklingen per øvelse her: estimert 1RM, toppvekt og volum.</p><button class="btn primary block" data-act="tab" data-k="okt">Start en økt</button></div>`;
+  if (!names.length) return h + `<div class="empty"><h2>Ingen data ennå</h2><p>Når du har fullført økter, ser du utviklingen per øvelse her: estimert 1RM, toppvekt og volum for styrke, og tid, distanse og intensitet for kardio.</p><button class="btn primary block" data-act="tab" data-k="okt">Start en økt</button></div>`;
   if (!S.progEx || !names.some(n => key(n.name) === key(S.progEx))) S.progEx = names[0].name;
+  h += `<div class="chips" role="group" aria-label="Velg øvelse">${names.map(n => `<button class="chip" data-act="prog-ex" data-name="${esc(n.name)}" aria-pressed="${key(n.name)===key(S.progEx)}">${esc(n.name)}</button>`).join('')}</div>`;
+  if (exType(S.progEx) === 'cardio') return vProgressC(h);
   const pts = series(S.progEx);
-  h += `<div class="chips" role="group" aria-label="Velg øvelse">${names.map(n => `<button class="chip" data-act="prog-ex" data-name="${esc(n.name)}" aria-pressed="${key(n.name)===key(S.progEx)}">${esc(n.name)}</button>`).join('')}</div>
-    <div class="seg" role="group" aria-label="Mål">${Object.entries(METRICS).map(([k,[l]]) => `<button data-act="metric" data-k="${k}" aria-pressed="${S.metric===k}">${l}</button>`).join('')}</div>
-    <div class="chart" id="chart">${chartSVG(pts, S.metric)}</div>`;
+  h += `<div class="seg" role="group" aria-label="Mål">${Object.entries(METRICS).map(([k,[l]]) => `<button data-act="metric" data-k="${k}" aria-pressed="${S.metric===k}">${l}</button>`).join('')}</div>
+    <div class="chart" id="chart">${chartFor(S.progEx)}</div>`;
   const bestE = pts.reduce((a,p) => p.e1rm > a.e1rm ? p : a, pts[0]);
   const bestTop = Math.max(...pts.map(p => p.top));
   const first = pts[0], last = pts[pts.length-1];
@@ -492,7 +688,7 @@ function vProgress(){
   return h;
 }
 function niceStep(r){ const p = Math.pow(10, Math.floor(Math.log10(r))); const m = r/p; return (m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10)*p; }
-function chartSVG(pts, metric){
+function chartSVG(pts, metric, label, unit){
   const W = Math.max(300, Math.min(544, ($('#main')?.clientWidth || 360) - 16)), H = 230, L = 44, R = 18, T = 18, B = 30;
   if (!pts.length) return '';
   const vals = pts.map(p => p[metric]);
@@ -513,19 +709,28 @@ function chartSVG(pts, metric){
   const area = pts.length > 1 ? `${line} L${x(t1).toFixed(1)},${H-B} L${x(t0).toFixed(1)},${H-B} Z` : '';
   const lp = pts[pts.length-1];
   const lx = x(lp.t), ly = y(lp[metric]);
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${METRICS[metric][0]} over tid for ${esc(S.progEx)}">
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${label} over tid for ${esc(S.progEx)}">
     <defs><linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--sky)" stop-opacity=".55"/><stop offset="1" stop-color="var(--sky)" stop-opacity="0"/></linearGradient></defs>
     ${g}${area ? `<path d="${area}" fill="url(#fill)"/>` : ''}
     <path d="${line}" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
     ${pts.map(p => `<circle cx="${x(p.t)}" cy="${y(p[metric])}" r="3.5" fill="var(--surface)" stroke="var(--brand)" stroke-width="2"/>`).join('')}
     <circle cx="${lx}" cy="${ly}" r="6.5" fill="var(--brand)" stroke="var(--surface)" stroke-width="2.5"/>
-    <text class="lbl" x="${Math.min(lx, W-R)}" y="${Math.max(ly-12, 14)}" text-anchor="${pts.length===1?'middle':'end'}">${fmt(lp[metric])} kg</text>
+    <text class="lbl" x="${Math.min(lx, W-R)}" y="${Math.max(ly-12, 14)}" text-anchor="${pts.length===1?'middle':'end'}">${fmt(lp[metric], unit === 'km' ? 2 : 1)} ${unit}</text>
   </svg>${pts.length === 1 ? '<p class="hint" style="padding:0 8px 6px">Én økt logget. Kurven kommer når du har flere.</p>' : ''}`;
 }
 
 /* ---------- actions ---------- */
-function buildSets(name, n){
+function buildSets(name, n, type, rounds){
   const last = lastFor(name);
+  if (type === 'cardio'){
+    const sets = [];
+    for (let j = 0; j < n; j++){
+      const src = last ? (last.sets[j] || last.sets[last.sets.length-1]) : null;
+      const v = x => x == null ? '' : String(x).replace('.', ',');
+      sets.push({min: src ? v(src.min) : '', km: src ? v(src.km) : '', lvl: src ? v(src.lvl) : '', done:false});
+    }
+    return {name, type:'cardio', rpe:0, rounds: rounds || (last && last.rounds) || 1, sets, prev: last ? {date:last.date, rpe:last.rpe, rounds:last.rounds, sets:clone(last.sets)} : null};
+  }
   const sets = [];
   for (let j = 0; j < n; j++){
     const src = last ? (last.sets[j] || last.sets[last.sets.length-1]) : null;
@@ -533,17 +738,25 @@ function buildSets(name, n){
   }
   return {name, sets, prev: last ? {date:last.date, sets:last.sets.map(s=>({kg:s.kg, reps:s.reps}))} : null};
 }
-function startSession(tpl){
-  S.active = {id: uid(), name: tpl ? tpl.name : 'Økt ' + dShort(Date.now()), templateId: tpl ? tpl.id : null, startedAt: Date.now(),
-    exercises: tpl ? tpl.exercises.map(e => buildSets(e.name, e.sets)) : []};
+function startSession(tpl, cardio){
+  S.addType = cardio ? 'cardio' : 'strength';
+  S.active = {id: uid(), name: tpl ? tpl.name : (cardio ? 'Kardio ' : 'Økt ') + dShort(Date.now()), templateId: tpl ? tpl.id : null, startedAt: Date.now(),
+    exercises: tpl ? tpl.exercises.map(e => buildSets(e.name, e.sets, isC(e) ? 'cardio' : (exType(e.name) || 'strength'), isC(e) && e.rounds ? rnd(e) : 0)) : []};
   S.summary = null; S.tab = 'okt'; saveActive(true); keepAwake(true); render(); window.scrollTo(0,0);
 }
 function finishSession(){
   const a = S.active;
-  const exercises = a.exercises.map(e => ({name: e.name.trim(), sets: e.sets.filter(s => s.done).map(s => ({kg: num(s.kg) || 0, reps: Math.round(num(s.reps) || 0)})).filter(s => s.reps > 0)})).filter(e => e.sets.length);
+  const exercises = a.exercises.map(e => isC(e)
+    ? {name: e.name.trim(), type:'cardio', rpe: +e.rpe || null, rounds: rnd(e), sets: e.sets.filter(s => s.done).map(s => ({min: num(s.min) || 0, km: num(s.km), lvl: num(s.lvl)})).filter(s => s.min > 0 || s.km > 0)}
+    : {name: e.name.trim(), sets: e.sets.filter(s => s.done).map(s => ({kg: num(s.kg) || 0, reps: Math.round(num(s.reps) || 0)})).filter(s => s.reps > 0)}).filter(e => e.sets.length);
   if (!exercises.length){ toast('Huk av settene du har gjort før du fullfører.'); return; }
   const prs = [];
   for (const e of exercises){
+    if (isC(e)){
+      const prior = seriesC(e.name), km = e.sets.reduce((a,x) => a + (x.km||0), 0) * rnd(e);
+      if (prior.length && km > 0 && km > Math.max(...prior.map(p => p.km)) + 0.001) prs.push({name: e.name, val: km, unit:'km'});
+      continue;
+    }
     const prior = series(e.name); if (!prior.length) continue;
     const before = Math.max(...prior.map(p => p.e1rm));
     const now = Math.max(...e.sets.map(s => e1rm(s.kg, s.reps)));
@@ -554,9 +767,10 @@ function finishSession(){
   let changed = false;
   const tpl = a.templateId && Store.docs[a.templateId];
   if (tpl){
-    const sig = list => list.map(e => key(e.name) + ':' + (e.sets.length ?? e.sets)).join('|');
-    changed = sig(tpl.exercises.map(e => ({name:e.name, sets:{length:e.sets}}))) !== sig(exercises);
+    const sig = list => list.map(e => key(e.name) + ':' + (isC(e) ? 'c' + rnd(e) : 's') + ':' + (e.sets.length ?? e.sets)).join('|');
+    changed = sig(tpl.exercises.map(e => ({name:e.name, type:e.type, rounds:e.rounds, sets:{length:e.sets}}))) !== sig(exercises);
   }
+  if (a.templateId){ const td = ymd(Date.now()); plans().filter(p => p.date === td && p.templateId === a.templateId).forEach(p => Store.del(p.id)); }
   S.summary = {id, prs, tplId: a.templateId, changed};
   S.active = null; clearTimeout(saveT); Store.del('active'); keepAwake(false);
   render(); window.scrollTo(0,0);
@@ -579,9 +793,20 @@ document.addEventListener('click', ev => {
     case 'starters': STARTERS.forEach((t, n) => Store.put('tpl_' + uid(), {kind:'template', name:t.name, order:n, exercises:clone(t.exercises)})); toast('To maler lagt til'); break;
     case 'start': { if (S.active){ S.tab = 'okt'; render(); toast('Fullfør eller forkast økten du er i gang med først'); return; } startSession(templates().find(t => t.id === el.dataset.id)); break; }
     case 'start-empty': startSession(null); setTimeout(() => $('#addex')?.focus(), 50); break;
+    case 'start-cardio': if (S.active){ S.tab = 'okt'; render(); toast('Fullfør eller forkast økten du er i gang med først'); return; } startSession(null, true); setTimeout(() => $('#addex')?.focus(), 50); break;
+    case 'addtype': S.addType = el.dataset.k; { const v = $('#addex')?.value || ''; render(); const inp = $('#addex'); if (inp){ inp.value = v; } } break;
+    case 'rounds-minus': case 'rounds-plus': { const ex = a.exercises[i]; ex.rounds = Math.min(20, Math.max(1, rnd(ex) + (act === 'rounds-plus' ? 1 : -1))); saveActive(); render(); break; }
+    case 'tex-rminus': case 'tex-rplus': { const x = S.editor.exercises[i]; x.rounds = Math.min(20, Math.max(1, rnd(x) + (act === 'tex-rplus' ? 1 : -1))); render(); break; }
+    case 'rpe': { const ex = a.exercises[i]; const v = +el.dataset.v; ex.rpe = ex.rpe === v ? 0 : v; saveActive(); render(); break; }
+    case 'tex-type': { const x = S.editor.exercises[i]; const c = el.dataset.k === 'cardio'; if (c === isC(x)) break; if (c){ x.type = 'cardio'; x.sets = 1; x.rounds = 1; } else { delete x.type; delete x.rounds; x.sets = 3; } render(); break; }
     case 'done': {
       const s = a.exercises[i].sets[j]; s.done = !s.done;
-      if (s.done){
+      if (s.done && isC(a.exercises[i])){
+        if (s.min === '' && s.km === ''){ s.done = false; toast('Fyll inn minutter eller km først'); return; }
+        const nx = a.exercises[i].sets[j+1];
+        if (nx && !nx.done && nx.min === '' && nx.km === '' && nx.lvl === ''){ ['min','km','lvl'].forEach(k => { nx[k] = s[k]; const inp = $(`#${k}-${i}-${j+1}`); if (inp) inp.value = s[k]; }); }
+        if (navigator.vibrate) try { navigator.vibrate(12); } catch(e){}
+      } else if (s.done){
         if (s.kg === '' && s.reps === ''){ s.done = false; toast('Fyll inn kg og reps først'); return; }
         const nx = a.exercises[i].sets[j+1];
         if (nx && !nx.done && nx.kg === '' && nx.reps === ''){ nx.kg = s.kg; nx.reps = s.reps; const ki = $(`#kg-${i}-${j+1}`), ri = $(`#reps-${i}-${j+1}`); if (ki) ki.value = s.kg; if (ri) ri.value = s.reps; }
@@ -590,21 +815,24 @@ document.addEventListener('click', ev => {
       const row = $(`#set-${i}-${j}`); row.classList.toggle('done', s.done); el.setAttribute('aria-pressed', s.done);
       $('#bar').innerHTML = vBar(); saveActive(); break;
     }
-    case 'set-add': { const ss = a.exercises[i].sets; const l = ss[ss.length-1]; ss.push({kg: l ? l.kg : '', reps: l ? l.reps : '', done:false}); saveActive(); render(); break; }
+    case 'set-add': { const ss = a.exercises[i].sets; const l = ss[ss.length-1]; ss.push(isC(a.exercises[i]) ? {min: l ? l.min : '', km: l ? l.km : '', lvl: l ? l.lvl : '', done:false} : {kg: l ? l.kg : '', reps: l ? l.reps : '', done:false}); saveActive(); render(); break; }
     case 'set-del': if (a.exercises[i].sets.length > 1){ a.exercises[i].sets.pop(); saveActive(); render(); } break;
     case 'ex-del': if (!armOrGo(el)) return; a.exercises.splice(i, 1); saveActive(); render(); break;
     case 'ex-add': {
       const inp = $('#addex'); const name = inp.value.trim(); if (!name){ inp.focus(); return; }
       const known = exerciseNames().find(e => key(e.name) === key(name));
-      a.exercises.push(buildSets(known ? known.name : name, 3)); saveActive(); render();
-      const n = a.exercises.length - 1; setTimeout(() => $(`#kg-${n}-0`)?.scrollIntoView({block:'center', behavior:'smooth'}), 30); break;
+      const type = (known && exType(known.name)) || S.addType;
+      const lastK = type === 'cardio' && known ? lastFor(known.name) : null;
+      a.exercises.push(buildSets(known ? known.name : name, type === 'cardio' ? (lastK ? lastK.sets.length : 1) : 3, type)); saveActive(); render();
+      const n = a.exercises.length - 1; setTimeout(() => $(`#${type === 'cardio' ? 'min' : 'kg'}-${n}-0`)?.scrollIntoView({block:'center', behavior:'smooth'}), 30); break;
     }
     case 'discard': if (!armOrGo(el)) return; S.active = null; clearTimeout(saveT); Store.del('active'); keepAwake(false); render(); toast('Økten er forkastet'); break;
     case 'finish': { const [d] = doneCount(); if (!d){ toast('Huk av settene du har gjort før du fullfører.'); return; } el.dataset.confirm = `Lagre ${d} sett?`; if (!armOrGo(el)) return; finishSession(); break; }
+    case 'export': exportBackup(); break;
     case 'summary-close': S.summary = null; render(); break;
     case 'tpl-sync': {
       const s = Store.docs[S.summary.id], t = Store.docs[S.summary.tplId];
-      Store.put(S.summary.tplId, {...clone(t), exercises: s.exercises.map(e => ({name:e.name, sets:e.sets.length}))});
+      Store.put(S.summary.tplId, {...clone(t), exercises: s.exercises.map(e => isC(e) ? {name:e.name, sets:e.sets.length, type:'cardio', rounds:rnd(e)} : {name:e.name, sets:e.sets.length})});
       S.summary.changed = false; toast('Malen er oppdatert'); render(); break;
     }
     case 'tpl-new': S.editor = {id:null, name:'', exercises:[{name:'', sets:3}]}; render(); setTimeout(() => $('#tname')?.focus(), 30); break;
@@ -614,7 +842,7 @@ document.addEventListener('click', ev => {
     case 'tex-del': if (!armOrGo(el)) return; S.editor.exercises.splice(i, 1); render(); break;
     case 'tex-add': S.editor.exercises.push({name:'', sets:3}); render(); setTimeout(() => $(`#tex-${S.editor.exercises.length-1}`)?.focus(), 30); break;
     case 'tpl-save': {
-      const e = S.editor; const exs = e.exercises.map(x => ({name: x.name.trim(), sets: x.sets})).filter(x => x.name);
+      const e = S.editor; const exs = e.exercises.map(x => isC(x) ? {name: x.name.trim(), sets: x.sets, type:'cardio', rounds: rnd(x)} : {name: x.name.trim(), sets: x.sets}).filter(x => x.name);
       if (!e.name.trim()){ toast('Gi malen et navn'); $('#tname')?.focus(); return; }
       if (!exs.length){ toast('Legg til minst én øvelse'); return; }
       const id = e.id || 'tpl_' + uid();
@@ -627,8 +855,23 @@ document.addEventListener('click', ev => {
     case 'hist-back': S.histId = null; render(); break;
     case 'hist-del': if (!armOrGo(el)) return; Store.del(S.histId); S.histId = null; toast('Økten er slettet'); render(); break;
     case 'prog-ex': S.progEx = el.dataset.name; render(); break;
-    case 'metric': S.metric = el.dataset.k; render(); break;
-    case 'export': exportBackup(); break;
+    case 'metric': if (CMETRICS[el.dataset.k]) S.cmetric = el.dataset.k; else S.metric = el.dataset.k; render(); break;
+    case 'cal-prev': case 'cal-next': { const d = new Date(S.calMonth); d.setMonth(d.getMonth() + (act === 'cal-next' ? 1 : -1)); S.calMonth = d.getTime(); render(); break; }
+    case 'cal-day': { S.calDay = el.dataset.d; const d = new Date(fromYmd(S.calDay)), m = new Date(S.calMonth); if (d.getMonth() !== m.getMonth() || d.getFullYear() !== m.getFullYear()) S.calMonth = new Date(d.getFullYear(), d.getMonth(), 1).getTime(); render(); break; }
+    case 'cal-open': S.tab = 'hist'; S.histId = el.dataset.id; render(); window.scrollTo(0,0); break;
+    case 'plan-tpl': S.planTpl = el.dataset.id; render(); break;
+    case 'plan-rep': S.planRepeat = !S.planRepeat; render(); break;
+    case 'plan-add': {
+      const t = Store.docs[S.planTpl]; if (!t) return;
+      const n = S.planRepeat ? 8 : 1; let added = 0;
+      for (let w = 0; w < n; w++){
+        const d = new Date(fromYmd(S.calDay)); d.setDate(d.getDate() + 7*w); const k = ymd(d);
+        if (plans().some(p => p.date === k && p.templateId === S.planTpl)) continue;
+        Store.put('plan_' + uid(), {kind:'plan', date:k, templateId:S.planTpl, name:t.name}); added++;
+      }
+      S.planRepeat = false; toast(added ? (added === 1 ? `${t.name} er planlagt` : `${t.name} er planlagt ${added} uker fremover`) : 'Den er allerede planlagt'); break;
+    }
+    case 'plan-del': if (!armOrGo(el)) return; Store.del(el.dataset.id); break;
   }
 });
 
@@ -636,7 +879,7 @@ document.addEventListener('input', ev => {
   const el = ev.target, f = el.dataset.f; if (!f) return;
   const i = +el.dataset.i, j = +el.dataset.j;
   if (f === 'wkname'){ S.active.name = el.value; saveActive(); }
-  else if (f === 'kg' || f === 'reps'){ S.active.exercises[i].sets[j][f] = el.value.replace(/[^\d.,]/g, ''); saveActive(); }
+  else if (['kg','reps','min','km','lvl'].includes(f)){ S.active.exercises[i].sets[j][f] = el.value.replace(/[^\d.,]/g, ''); saveActive(); }
   else if (f === 'tname') S.editor.name = el.value;
   else if (f === 'tex') S.editor.exercises[i].name = el.value;
 });
@@ -645,10 +888,12 @@ document.addEventListener('keydown', ev => {
   const el = ev.target;
   if (el.id === 'addex'){ ev.preventDefault(); $('[data-act="ex-add"]').click(); }
   else if (el.dataset.f === 'kg'){ ev.preventDefault(); $(`#reps-${el.dataset.i}-${el.dataset.j}`)?.focus(); }
-  else if (el.dataset.f === 'reps'){ ev.preventDefault(); el.blur(); }
+  else if (el.dataset.f === 'min'){ ev.preventDefault(); $(`#km-${el.dataset.i}-${el.dataset.j}`)?.focus(); }
+  else if (el.dataset.f === 'km'){ ev.preventDefault(); $(`#lvl-${el.dataset.i}-${el.dataset.j}`)?.focus(); }
+  else if (el.dataset.f === 'reps' || el.dataset.f === 'lvl'){ ev.preventDefault(); el.blur(); }
 });
-document.addEventListener('focusin', ev => { if (ev.target.dataset && (ev.target.dataset.f === 'kg' || ev.target.dataset.f === 'reps')) setTimeout(() => { try { ev.target.select(); } catch(e){} }, 0); });
-let rw; window.addEventListener('resize', () => { clearTimeout(rw); rw = setTimeout(() => { if (S.tab === 'frem' && $('#chart')) $('#chart').innerHTML = chartSVG(series(S.progEx), S.metric); }, 200); });
+document.addEventListener('focusin', ev => { if (ev.target.dataset && ['kg','reps','min','km','lvl'].includes(ev.target.dataset.f)) setTimeout(() => { try { ev.target.select(); } catch(e){} }, 0); });
+let rw; window.addEventListener('resize', () => { clearTimeout(rw); rw = setTimeout(() => { if (S.tab === 'frem' && $('#chart') && $('#chart svg')) $('#chart').innerHTML = chartFor(S.progEx); }, 200); });
 
 async function exportBackup(){
   const docs = {...Store.docs}; delete docs.active;
@@ -665,8 +910,8 @@ document.addEventListener('change', ev => {
     try {
       const d = JSON.parse(r.result);
       if (!d || d.app !== 'snatched' || typeof d.docs !== 'object') throw 0;
-      let n = 0; for (const k in d.docs){ const v = d.docs[k]; if (v && (v.kind === 'session' || v.kind === 'template')){ Store.docs[k] = v; n++; } }
-      Store.saveLocal(); render(); toast(n + ' økter og maler gjenopprettet');
+      let n = 0; for (const k in d.docs){ const v = d.docs[k]; if (v && (v.kind === 'session' || v.kind === 'template' || v.kind === 'plan')){ Store.docs[k] = v; n++; } }
+      Store.saveLocal(); render(); toast(n + ' elementer gjenopprettet');
     } catch(e){ toast('Filen er ikke en Snatched-kopi'); }
   };
   r.readAsText(ev.target.files[0]); ev.target.value = '';
